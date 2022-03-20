@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Signup from "./components/signup/Signup";
+import Signin from "./components/signin/Signin";
+import Home from "./components/home/Home";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import { IMyContext, myContext } from "./context/myContext";
+import { useContext } from "react";
 
-function App() {
+const queryClient = new QueryClient();
+
+const App = () => {
+  const { state } = useContext(myContext) as IMyContext;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Signin />} />
+          <Route path="signup" element={<Signup />} />
+          <Route
+            path="home"
+            element={
+              <ProtectedRoutes isLogged={state.isLogged}>
+                <Home />
+              </ProtectedRoutes>
+            }
+          />
+        </Routes>
+      </Router>
+    </QueryClientProvider>
   );
-}
+};
 
 export default App;

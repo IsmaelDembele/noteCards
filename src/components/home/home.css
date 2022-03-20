@@ -1,0 +1,13 @@
+.home_page {
+  /* display: grid; */
+
+  /* grid-template-rows: 6rem 1fr; */
+}
+
+.main {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 20rem 1fr;
+}
+
+

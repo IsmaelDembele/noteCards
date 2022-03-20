@@ -1,0 +1,48 @@
+.nav {
+  position: absolute;
+  background-color: var(--moss-green) !important;
+  width: calc(100vw - var(--drawer-width));
+  height: var(--nav-bar-height);
+  /* z-index: -1; */
+  /* padding-left: 21rem; */
+  margin-left: var(--drawer-width);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.nav-btn {
+  width: 10rem;
+  text-align: center;
+  font-weight: 400;
+  font-size: 1.4rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.nav-form {
+  /* background-color: blue; */
+  display: flex;
+  width: 16%;
+  align-items: center;
+  height: 2.1rem;
+}
+
+.input {
+  border: none;
+  outline: none;
+  border-radius: 2px;
+  padding: 1px 3px;
+  height: 1.7rem;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+}
+
+.nav-add-btn {
+  color: var(--btn);
+  cursor: pointer;
+}
+.nav-add-btn:hover {
+  color: var(--tea-green);
+}
