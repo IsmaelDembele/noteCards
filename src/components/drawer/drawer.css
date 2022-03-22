@@ -1,3 +1,19 @@
 .drawer {
-  background-color: var(--tea-green);
+  background-color: var(--russian-green);
+  padding: 1.2rem;
+  text-align: center;
+  letter-spacing: 0.5rem;
+  color: var(--text-color-lighter);
+}
+
+.welcome {
+  padding-bottom: 0.3rem;
+  border-bottom: 3px solid var(--nyanza);
+}
+
+.menu {
+  /* cursor: pointer; */
+  width: 100%;
+  margin-top: 2rem;
+  /* background-color: white; */
 }

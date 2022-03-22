@@ -6,7 +6,7 @@ interface IProtectedRoute {
 }
 
 const ProtectedRoutes: React.FC<IProtectedRoute | any> = ({ isLogged, children }) => {
-  if (!isLogged) return <Navigate to="/" replace />;
+  if (!isLogged) return <Navigate to="/signin" replace />;
   return children;
 };
 

@@ -2,7 +2,7 @@ import "./signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {  useMutation } from "react-query";
+import { useMutation } from "react-query";
 import { postCreateAccount } from "../../apis/myApis";
 
 export interface ISignup {
@@ -38,8 +38,7 @@ const Signup = () => {
         password: Yup.string().min(5, "Must be at least five characteres").required("Required"),
         passwordConfirm: Yup.string()
           .min(5, "Must be at least five characteres")
-          .oneOf([Yup.ref("password")], "password must be the same")
-
+          .oneOf([Yup.ref("password")], "passwords must be the same")
           .required("Required"),
       })}
       onSubmit={(values, { resetForm }) => {
@@ -84,15 +83,10 @@ const Signup = () => {
             <ErrorMessage name="password" />
           </span>
 
-          <label className="label" htmlFor="Confirm password">
+          <label className="label" htmlFor="passwordConfirm">
             Confirm password
           </label>
-          <Field
-            type="password"
-            id="passwordConfirm password"
-            name="passwordConfirm"
-            className="input"
-          />
+          <Field type="password" id="passwordConfirm" name="passwordConfirm" className="input" />
           <span className="error">
             <ErrorMessage name="passwordConfirm" />
           </span>

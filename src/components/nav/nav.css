@@ -1,6 +1,6 @@
 .nav {
   position: absolute;
-  background-color: var(--moss-green) !important;
+  background-color: var(--russian-green);
   width: calc(100vw - var(--drawer-width));
   height: var(--nav-bar-height);
   /* z-index: -1; */
@@ -24,17 +24,18 @@
 .nav-form {
   /* background-color: blue; */
   display: flex;
-  width: 16%;
+  /* width: 16%; */
   align-items: center;
   height: 2.1rem;
 }
 
 .input {
+  width: 16rem;
   border: none;
   outline: none;
   border-radius: 2px;
   padding: 1px 3px;
-  height: 1.7rem;
+  height: 2rem;
   font-size: 1.2rem;
   margin-right: 1rem;
 }

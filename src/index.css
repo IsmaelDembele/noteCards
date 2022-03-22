@@ -1,7 +1,7 @@
 :root {
   --text-color-darker: #222;
   --text-color: #444;
-  --text-color-lighter: #666;
+  --text-color-lighter: #ddd;
 
   --nav-bar-height: 6rem;
   --drawer-width: 20rem;

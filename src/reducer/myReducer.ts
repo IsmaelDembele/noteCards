@@ -1,16 +1,26 @@
 // import { useQuery } from "react-query";
 // import { getLogged } from "../apis/myApis";
 // import Signin from "../components/signin/Signin";
-import { IAction, ISate } from "../context/myContext";
+import { IAction, IState } from "../context/myContext";
 
-export const reducer = (state: ISate, action: IAction): ISate => {
+export const reducer = (state: IState, action: IAction): IState => {
   switch (action.type) {
     case "getToken": {
-      const { token, email } = action.payload as { token: string; email: string };
+      // console.log("gettoken", action.payload);
+
+      const { token, email, firstname, lastname } = action.payload as {
+        token: string;
+        msg?: string | undefined;
+        email: string;
+        firstname: string;
+        lastname: string;
+      };
       return {
         ...state,
         token: token,
         signin: { email: email },
+        firstname: firstname,
+        lastname: lastname,
       };
     }
     case "setSignin": {
@@ -19,10 +29,19 @@ export const reducer = (state: ISate, action: IAction): ISate => {
     case "signOut": {
       localStorage.removeItem("signInCredentials");
       return {
+        ...state,
         token: "",
         signin: { email: "" },
 
         isLogged: false,
+        firstname: "",
+        lastname: "",
+      };
+    }
+    case "addTopic": {
+      return {
+        ...state,
+        navAddTopic: action.payload as string,
       };
     }
     default:

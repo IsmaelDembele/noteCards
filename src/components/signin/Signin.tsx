@@ -4,7 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useContext } from "react";
 import { IMyContext, ISignin, myContext } from "../../context/myContext";
-import {  useMutation, useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { getLogged, postLogged } from "../../apis/myApis";
 
 const Signin = () => {
@@ -14,18 +14,27 @@ const Signin = () => {
 
   // const queryClient = new QueryClient();
   const { isError } = useQuery(
-    ["islogged", state.token, state.signin.email],
+    ["islogged", state.token, state.signin.email, state.firstname, state.lastname],
     () => getLogged(state.token, state.signin.email),
     {
       onSuccess: data => {
-        if (state.token.length > 0 && state.signin.email.length > 0) {
+        if (
+          !localStorage.getItem("signInCredentials") &&
+          state.token.length > 0 &&
+          state.signin.email.length > 0
+        ) {
           //save the token
-          const signInCredentials = { token: state.token, email: state?.signin.email };
+          const signInCredentials = {
+            token: state.token,
+            email: state?.signin.email,
+            firstname: state.firstname,
+            lastname: state.lastname,
+          };
           localStorage.setItem("signInCredentials", JSON.stringify(signInCredentials, null, 2));
         }
         if (data?.data) {
           dispatch({ type: "setSignin", payload: true });
-          navigate("/home");
+          navigate("/");
         } else {
           dispatch({ type: "signOut" });
         }
@@ -38,9 +47,9 @@ const Signin = () => {
   const mutation = useMutation((values: ISignin) => postLogged(values), {
     onSuccess: async data => {
       if (data?.data?.msg === "ok") {
-        const { token, msg, email } = data?.data;
+        const { token, msg, email, firstname, lastname } = data?.data;
 
-        dispatch({ type: "getToken", payload: { token, msg, email } });
+        dispatch({ type: "getToken", payload: { token, msg, email, firstname, lastname } });
         // const result = await queryClient.fetchQuery("islogged", () => getLogged(token, email));
       }
     },

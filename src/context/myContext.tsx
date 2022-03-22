@@ -2,14 +2,17 @@ import React, { createContext, useReducer } from "react";
 import { reducer } from "../reducer/myReducer";
 
 export interface IMyContext {
-  state: ISate;
+  state: IState;
   dispatch: React.Dispatch<IAction>;
 }
 
-export interface ISate {
+export interface IState {
   isLogged: boolean;
   signin: ISignin;
   token: string;
+  firstname: string;
+  lastname: string;
+  navAddTopic: string;
 }
 
 export interface ISignin {
@@ -19,21 +22,24 @@ export interface ISignin {
 
 export interface IAction {
   type: string;
-  payload?: { token: string; msg: string; email: string } | ISignin | boolean;
+  payload?:
+    | { token: string; msg?: string; email: string; firstname: string; lastname: string }
+    | ISignin
+    | boolean
+    | string;
 }
 
-const initialState: ISate = {
+const storage = JSON.parse(localStorage.getItem("signInCredentials") as string);
+
+const initialState: IState = {
   isLogged: false,
   signin: {
-    email:
-      (localStorage.getItem("signInCredentials") &&
-        JSON.parse(localStorage.getItem("signInCredentials") as string)?.email) ||
-      "",
+    email: (localStorage.getItem("signInCredentials") && storage?.email) || "",
   },
-  token:
-    (localStorage.getItem("signInCredentials") &&
-      JSON.parse(localStorage.getItem("signInCredentials") as string)?.token) ||
-    "",
+  token: (localStorage.getItem("signInCredentials") && storage?.token) || "",
+  firstname: (localStorage.getItem("signInCredentials") && storage?.firstname) || "", //get them from localstorage
+  lastname: (localStorage.getItem("signInCredentials") && storage?.lastname) || "",
+  navAddTopic: "",
 };
 
 const myContext = createContext<IMyContext | null>(null);
