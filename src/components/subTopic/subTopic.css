@@ -1,0 +1,73 @@
+.topic {
+  margin: calc(var(--nav-bar-height) + 3rem) 3rem;
+  /* padding-top: 1rem;
+  padding-left: 1rem; */
+  color: var(--text-color-darker);
+  /* background-color: red; */
+  display: grid;
+  grid-template-rows: 10rem;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 10rem;
+  /* justify-items: center; */
+  /* justify-items: center; */
+  gap: 5rem;
+}
+
+.topic .title {
+  background-color: var(--tea-green);
+
+  grid-column: 1 / end;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.topic .title .btn {
+  width: 20%;
+  height: auto;
+  border-radius: 3px;
+  padding: 5px 3px;
+  transition: all 0.3s;
+}
+
+.topic .title .btn:hover {
+  background-color: var(--laurel-green);
+}
+
+.topic .title .add-subtopic {
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topic .title .btn {
+  background-color: transparent;
+  /* font-size: .5rem; */
+  height: 3.5rem;
+  color: var(--russian-green);
+  margin-left: 1rem;
+}
+.topic .title .btn:hover {
+  background-color: transparent;
+  /* font-size: .5rem; */
+  height: 3.5rem;
+  color: var(--moss-green);
+  margin-left: 1rem;
+}
+
+.topic .input {
+  height: 2rem;
+}
+
+
+.topic-items {
+  cursor: pointer;
+  border-radius: 3px;
+  background-color: var(--nyanza);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

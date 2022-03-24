@@ -2,10 +2,48 @@ import axios from "axios";
 import { ISignup } from "../components/signup/Signup";
 import { ISignin } from "../context/myContext";
 
+export interface IReadCard {
+  front: string;
+  back: string;
+  note: string;
+}
+
 const pathRoutes = {
   IS_LOGGED: "/islogged",
   SIGN_IN: "/signin",
   CREATE_ACCOUNT: "/createAccount",
+  POST_TOPIC: "/postTopics",
+  GET_TOPIC: "/getTopics",
+  POST_SUB_TOPIC: "/postSubTopic",
+  GET_SUB_TOPIC: "/getSubTopic",
+  GET_CARDS: "/getCards",
+};
+
+export const getCards = async ({ front, back, note }: IReadCard) => {
+  return await axios.get(
+    `http://localhost:5000${pathRoutes.GET_CARDS}/?front=${front}&back=${back}&note=${note}`
+  );
+};
+
+export const getSubTopic = async (topic: string) => {
+  if (topic.length === 0) return null;
+
+  return await axios.get(`http://localhost:5000${pathRoutes.GET_SUB_TOPIC}/?topic=${topic}`);
+};
+
+export const postSubTopic = async ({ subtopic, topic }: { subtopic: string; topic: string }) => {
+  if (subtopic.length === 0) return null;
+
+  return await axios.post(`http://localhost:5000${pathRoutes.POST_SUB_TOPIC}`, { subtopic, topic });
+};
+
+export const getTopics = async () => {
+  return await axios.get(`http://localhost:5000${pathRoutes.GET_TOPIC}`);
+};
+
+export const postTopic = async (topic: string) => {
+  if (topic.length < 1) return null;
+  return await axios.post(`http://localhost:5000${pathRoutes.POST_TOPIC}`, { topic });
 };
 
 //islogged axios

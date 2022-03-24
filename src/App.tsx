@@ -9,7 +9,7 @@ import { useContext } from "react";
 import Nav from "./components/nav/Nav";
 import Topics from "./components/topics/Topics";
 import Drawer from "./components/drawer/Drawer";
-import Topic from "./components/topic/Topic";
+import SubTopic from "./components/subTopic/SubTopic";
 
 const queryClient = new QueryClient();
 
