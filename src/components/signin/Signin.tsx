@@ -2,38 +2,40 @@ import "./signin.css";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useContext } from "react";
-import { IMyContext, ISignin, myContext } from "../../context/myContext";
 import { useMutation, useQuery } from "react-query";
 import { getLogged, postLogged } from "../../apis/myApis";
+import { getToken, IAuthState, setSignin } from "../../features/authentication/authSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 const Signin = () => {
   let navigate = useNavigate();
-  const initialValues: ISignin = { email: "", password: "" };
-  const { state, dispatch } = useContext(myContext) as IMyContext;
+  const initialValues: IAuthState = { email: "", password: "" };
+  const dispatch = useAppDispatch();
+  const state = useAppSelector(state => state.auth);
 
-  // const queryClient = new QueryClient();
+  // const { state, dispatch } = useContext(myContext) as IMyContext;
+
   const { isError } = useQuery(
-    ["islogged", state.token, state.signin.email, state.firstname, state.lastname],
-    () => getLogged(state.token, state.signin.email),
+    ["islogged", state.token, state.email, state.firstname, state.lastname],
+    () => getLogged(state.token as string, state.email),
     {
       onSuccess: data => {
         if (
           !localStorage.getItem("signInCredentials") &&
-          state.token.length > 0 &&
-          state.signin.email.length > 0
+          (state.token as string).length > 0 &&
+          state.email.length > 0
         ) {
           //save the token
           const signInCredentials = {
             token: state.token,
-            email: state?.signin.email,
+            email: state.email,
             firstname: state.firstname,
             lastname: state.lastname,
           };
           localStorage.setItem("signInCredentials", JSON.stringify(signInCredentials, null, 2));
         }
         if (data?.data) {
-          dispatch({ type: "setSignin", payload: true });
+          dispatch(setSignin(true));
           navigate("/");
         } else {
           dispatch({ type: "signOut" });
@@ -45,12 +47,13 @@ const Signin = () => {
 
   if (isError) alert(" error ");
 
-  const mutation = useMutation((values: ISignin) => postLogged(values), {
+  const mutation = useMutation((values: IAuthState) => postLogged(values), {
     onSuccess: async data => {
       if (data?.data?.msg === "ok") {
         const { token, msg, email, firstname, lastname } = data?.data;
 
-        dispatch({ type: "getToken", payload: { token, msg, email, firstname, lastname } });
+        // dispatch({ type: "getToken", payload: { token, msg, email, firstname, lastname } });
+        dispatch(getToken({ token, msg, email, firstname, lastname }));
         // const result = await queryClient.fetchQuery("islogged", () => getLogged(token, email));
       }
     },
@@ -65,7 +68,7 @@ const Signin = () => {
         email: Yup.string().email("Invalid email address").required("Required"),
         password: Yup.string().min(5, "Must be at least five characters").required("Required"),
       })}
-      onSubmit={(values: ISignin) => {
+      onSubmit={(values: IAuthState) => {
         mutation.mutate(values);
       }}
     >

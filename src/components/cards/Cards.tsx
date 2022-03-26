@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { getCards, IReadCard } from "../../apis/myApis";
-import { IMyContext, myContext } from "../../context/myContext";
 import "./cards.css";
 
 interface ICards {
@@ -9,16 +8,29 @@ interface ICards {
   subTopic: string;
 }
 
+type TCard = {
+  front: string;
+  back: string;
+  note: string;
+};
+
+const initalvalue: TCard = { front: "", back: "", note: "" };
+
 const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
   const [newCard, setNewCard] = useState(false);
-  const { state, dispatch } = useContext(myContext) as IMyContext;
-  const mutation = useMutation(({ front, back, note }: IReadCard) =>
-    getCards({ front, back, note })
+  const [card, setCard] = useState<TCard>(initalvalue);
+  // const { state, dispatch } = useContext(myContext) as IMyContext;
+  const mutation = useMutation(({ topic, subTopic, front, back, note }: IReadCard) =>
+    getCards({ topic, subTopic, front, back, note })
   );
 
-  useEffect(() => {
-    console.log(state.card);
-  }, [state.card]);
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setCard({
+      ...card,
+      [name]: value,
+    });
+  };
 
   return (
     <section className="cards">
@@ -46,13 +58,8 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
               cols={30}
               rows={10}
               placeholder="Title or front of the note card"
-              value={state.card?.front}
-              onChange={e =>
-                dispatch({
-                  type: "cardsHandleChange",
-                  payload: { name: e.target.name, value: e.target.value },
-                })
-              }
+              value={card.front}
+              onChange={e => handleChange(e)}
             ></textarea>
             <textarea
               name="back"
@@ -60,13 +67,8 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
               cols={30}
               rows={10}
               placeholder="Back or details of the note card"
-              value={state.card?.back}
-              onChange={e =>
-                dispatch({
-                  type: "cardsHandleChange",
-                  payload: { name: e.target.name, value: e.target.value },
-                })
-              }
+              value={card.back}
+              onChange={e => handleChange(e)}
             ></textarea>
             <textarea
               name="note"
@@ -74,22 +76,19 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
               cols={30}
               rows={10}
               placeholder="Note about the card"
-              value={state.card?.note}
-              onChange={e =>
-                dispatch({
-                  type: "cardsHandleChange",
-                  payload: { name: e.target.name, value: e.target.value },
-                })
-              }
+              value={card.note}
+              onChange={e => handleChange(e)}
             ></textarea>
           </div>
           <button
             className="btn"
             onClick={() =>
               mutation.mutate({
-                front: state.card.front,
-                back: state.card.back,
-                note: state.card.note,
+                topic: topic,
+                subTopic: subTopic,
+                front: card.front,
+                back: card.back,
+                note: card.note,
               })
             }
           >

@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AddCircle } from "@mui/icons-material";
 import "./subTopic.css";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getSubTopic, postSubTopic } from "../../apis/myApis";
-import { IMyContext, myContext } from "../../context/myContext";
 import { localStorageTopicKey } from "../../constantes/constantes";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { viewCards } from "../../features/application/appSlice";
 
 interface IProps {
   title: string;
@@ -16,8 +17,8 @@ interface ISubTopic {
   topicID: string;
 }
 
-const SubTopic: React.FC<IProps> = props => {
-  const { title } = props;
+const SubTopic: React.FC<IProps> = ({ title }) => {
+  const [inputValue, setInputValue] = useState<string>("");
   const queryClient = useQueryClient();
   const mutation = useMutation(
     ({ subtopic, topic }: { subtopic: string; topic: string }) => postSubTopic({ subtopic, topic }),
@@ -32,15 +33,17 @@ const SubTopic: React.FC<IProps> = props => {
       localStorage.setItem(localStorageTopicKey, title);
     },
   });
-  const { state, dispatch } = useContext(myContext) as IMyContext;
+  // const { state, dispatch } = useContext(myContext) as IMyContext;
+  const dispatch = useAppDispatch();
+  const state = useAppSelector(state => state.auth);
 
   const handleSubmit = (
     e: React.MouseEvent<SVGSVGElement, MouseEvent> | React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
 
-    mutation.mutate({ subtopic: state?.subtopicInputValue as string, topic: title });
-    state.subtopicInputValue = "";
+    mutation.mutate({ subtopic: inputValue as string, topic: title });
+    setInputValue("");
   };
 
   if (isSuccess) console.log("subtopic", title);
@@ -54,8 +57,8 @@ const SubTopic: React.FC<IProps> = props => {
             type="text"
             placeholder="Enter a new subTopic"
             className="input"
-            value={state?.subtopicInputValue}
-            onChange={e => dispatch({ type: "addSubTopic", payload: e.target.value })}
+            value={inputValue}
+            onChange={e => setInputValue(e.target.value)}
           />
           <AddCircle sx={{ fontSize: "23" }} className="btn" onClick={e => handleSubmit(e)} />
         </form>
@@ -67,7 +70,7 @@ const SubTopic: React.FC<IProps> = props => {
               className="topic-items"
               key={index}
               onClick={() => {
-                dispatch({ type: "viewCards", payload: {topic: title, subtopic: el.name} });
+                dispatch(viewCards({ topic: title, subTopic: el.name }));
               }}
             >
               {el.name}

@@ -1,14 +1,16 @@
 import React, { useContext } from "react";
-import { IMyContext, myContext } from "../../context/myContext";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { review } from "../../features/application/appSlice";
 import "./drawer.css";
 
 const Drawer = () => {
-  const { state, dispatch } = useContext(myContext) as IMyContext;
+  const dispatch = useAppDispatch();
+  const state = useAppSelector(state => state.auth);
   return (
     <section className="drawer">
       <div className="welcome">Welcome {state.firstname}</div>
 
-      <button className="btn menu" onClick={() => dispatch({ type: "review" })}>
+      <button className="btn menu" onClick={() => dispatch(review())}>
         Review
       </button>
       <button className="btn menu">Test</button>

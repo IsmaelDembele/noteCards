@@ -1,8 +1,11 @@
 import axios from "axios";
-import { ISignup } from "../components/signup/Signup";
-import { ISignin } from "../context/myContext";
+import { IAuthState } from "../features/authentication/authSlice";
+// import { ISignup } from "../components/signup/Signup";
+// import { ISignin } from "../context/myContext";
 
 export interface IReadCard {
+  topic: string;
+  subTopic: string;
   front: string;
   back: string;
   note: string;
@@ -19,9 +22,9 @@ const pathRoutes = {
   GET_CARDS: "/getCards",
 };
 
-export const getCards = async ({ front, back, note }: IReadCard) => {
+export const getCards = async ({ topic, subTopic, front, back, note }: IReadCard) => {
   return await axios.get(
-    `http://localhost:5000${pathRoutes.GET_CARDS}/?front=${front}&back=${back}&note=${note}`
+    `http://localhost:5000${pathRoutes.GET_CARDS}/?front=${front}&back=${back}&note=${note}&topic=${topic}&subTopic=${subTopic}`
   );
 };
 
@@ -48,17 +51,18 @@ export const postTopic = async (topic: string) => {
 
 //islogged axios
 export const getLogged = async (token: string, email: string) => {
+
   if (token === "" || email === "") return null;
   return await axios.get(
     `http://localhost:5000${pathRoutes.IS_LOGGED}/?token=${token}&email=${email}`
   );
 };
 
-export const postLogged = async (logginInfo: ISignin) => {
+export const postLogged = async (logginInfo: IAuthState) => {
   return await axios.post(`http://localhost:5000${pathRoutes.SIGN_IN}`, { logginInfo });
 };
 
-export const postCreateAccount = async (signupInfo: ISignup) => {
+export const postCreateAccount = async (signupInfo: IAuthState) => {
   return await await axios.post(`http://localhost:5000${pathRoutes.CREATE_ACCOUNT}`, {
     signupInfo,
   });

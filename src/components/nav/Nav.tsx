@@ -1,18 +1,21 @@
-import { useContext } from "react";
-import { IMyContext, myContext } from "../../context/myContext";
 import "./nav.css";
-import { focusManager, useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { postTopic } from "../../apis/myApis";
 import { AddCircle } from "@mui/icons-material";
 import LinearProgress from "@mui/material/LinearProgress";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { signOut } from "../../features/authentication/authSlice";
+import { setRoute } from "../../features/application/appSlice";
+import { routes } from "../../constantes/constantes";
+import { useState } from "react";
 
 const Nav = () => {
   const queryClient = useQueryClient();
-
-  const { dispatch, state } = useContext(myContext) as IMyContext;
+  const [inputValue, setInputValue] = useState<string>("");
+  const dispatch = useAppDispatch();
+  const state = useAppSelector(state => state.auth);
   const mutation = useMutation((value: string) => postTopic(value), {
     onSuccess: data => {
-      // focusManager.setFocused(true);
       queryClient.invalidateQueries("getTopics");
     },
   });
@@ -21,8 +24,8 @@ const Nav = () => {
     e: React.MouseEvent<SVGSVGElement, MouseEvent> | React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
-    mutation.mutate(state?.navInputTopicValue as string);
-    state.navInputTopicValue = "";
+    mutation.mutate(inputValue);
+    setInputValue("");
   };
 
   return (
@@ -34,8 +37,8 @@ const Nav = () => {
             type="text"
             placeholder="Create a new topic"
             className="nav-input"
-            value={state.navInputTopicValue}
-            onChange={e => dispatch({ type: "addTopic", payload: e.target.value })}
+            value={inputValue}
+            onChange={e => setInputValue(e.target.value)}
           />
           <AddCircle className="nav-add-btn" sx={{ fontSize: 23 }} onClick={e => handleSubmit(e)} />
         </form>
@@ -43,7 +46,8 @@ const Nav = () => {
           className="btn nav-btn"
           onClick={() => {
             console.log("signing out");
-            dispatch({ type: "signOut" });
+            dispatch(signOut());
+            dispatch(setRoute(routes.topics));
           }}
         >
           sign out
