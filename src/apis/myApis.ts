@@ -1,7 +1,5 @@
 import axios from "axios";
 import { IAuthState } from "../features/authentication/authSlice";
-// import { ISignup } from "../components/signup/Signup";
-// import { ISignin } from "../context/myContext";
 
 export interface IReadCard {
   topic: string;
@@ -51,7 +49,6 @@ export const postTopic = async (topic: string) => {
 
 //islogged axios
 export const getLogged = async (token: string, email: string) => {
-
   if (token === "" || email === "") return null;
   return await axios.get(
     `http://localhost:5000${pathRoutes.IS_LOGGED}/?token=${token}&email=${email}`

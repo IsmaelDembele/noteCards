@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import {
   localStorageRouteKey,
-  localStorageSignInCredentialsKey,
   localStorageSubTopicKey,
   localStorageTopicKey,
   routes,
@@ -14,13 +13,15 @@ export interface IAppState {
   subTopic: string;
 }
 
-const storage = JSON.parse(localStorage.getItem(localStorageSignInCredentialsKey) as string);
+// const storage = JSON.parse(localStorage.getItem(localStorageSignInCredentialsKey) as string);
 
 const initialState: IAppState = {
   route: localStorage.getItem(localStorageRouteKey) || routes.topics,
   topic: localStorage.getItem(localStorageTopicKey) || "",
   subTopic: localStorage.getItem(localStorageSubTopicKey) || "",
 };
+
+console.log(initialState);
 
 export const appSlice = createSlice({
   name: "app",
@@ -32,6 +33,7 @@ export const appSlice = createSlice({
     viewSubtopics: (state, action) => {
       state.route = routes.subtopic;
       state.topic = action.payload;
+
       localStorage.setItem(localStorageRouteKey, routes.subtopic);
     },
     viewCards: (state, action) => {
@@ -50,6 +52,6 @@ export const appSlice = createSlice({
   },
 });
 
-export const { setRoute, viewSubtopics, viewCards, review } = appSlice.actions;
+export const { viewSubtopics, viewCards, review } = appSlice.actions;
 
 export default appSlice.reducer;

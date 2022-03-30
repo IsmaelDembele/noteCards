@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useMutation } from "react-query";
 import { getCards, IReadCard } from "../../apis/myApis";
 import "./cards.css";
@@ -19,7 +19,6 @@ const initalvalue: TCard = { front: "", back: "", note: "" };
 const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
   const [newCard, setNewCard] = useState(false);
   const [card, setCard] = useState<TCard>(initalvalue);
-  // const { state, dispatch } = useContext(myContext) as IMyContext;
   const mutation = useMutation(({ topic, subTopic, front, back, note }: IReadCard) =>
     getCards({ topic, subTopic, front, back, note })
   );
@@ -41,12 +40,12 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
         </button>
       </div>
       {!newCard && (
-        <>
-          <p>q</p>
-          <p>q</p>
-          <p>q</p>
-          <p>q</p>
-        </>
+        <div className="list-items">
+          <p className="item">q</p>
+          <p className="item">q</p>
+          <p className="item">q</p>
+          <p className="item">q</p>
+        </div>
       )}
 
       {newCard && (
@@ -82,15 +81,17 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
           </div>
           <button
             className="btn"
-            onClick={() =>
+            onClick={e => {
+              e.preventDefault();
+              setNewCard(false);
               mutation.mutate({
                 topic: topic,
                 subTopic: subTopic,
                 front: card.front,
                 back: card.back,
                 note: card.note,
-              })
-            }
+              });
+            }}
           >
             submit
           </button>

@@ -4,6 +4,8 @@
   text-align: center;
   letter-spacing: 0.5rem;
   color: var(--text-color-lighter);
+  grid-row: 1 / end;
+  grid-column: 1 / 2;
 }
 
 .welcome {
@@ -12,8 +14,6 @@
 }
 
 .menu {
-  /* cursor: pointer; */
   width: 100%;
   margin-top: 2rem;
-  /* background-color: white; */
 }

@@ -4,6 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useMutation } from "react-query";
 import { postCreateAccount } from "../../apis/myApis";
+import { routes } from "../../constantes/constantes";
 
 export interface ISignup {
   firstname: string;
@@ -97,7 +98,7 @@ const Signup = () => {
         </Form>
         <hr />
         <p className="text-create-account">
-          Go back to the <Link to="/">Sign in page</Link>{" "}
+          Go back to the <Link to={routes.signin}>Sign in page</Link>{" "}
         </p>
       </div>
     </Formik>

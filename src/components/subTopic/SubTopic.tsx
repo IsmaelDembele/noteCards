@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { AddCircle } from "@mui/icons-material";
 import "./subTopic.css";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getSubTopic, postSubTopic } from "../../apis/myApis";
-import { localStorageTopicKey } from "../../constantes/constantes";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { localStorageTopicKey, routes } from "../../constantes/constantes";
+import { useAppDispatch } from "../../app/hooks";
 import { viewCards } from "../../features/application/appSlice";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   title: string;
@@ -20,6 +21,7 @@ interface ISubTopic {
 const SubTopic: React.FC<IProps> = ({ title }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const queryClient = useQueryClient();
+  let navigate = useNavigate();
   const mutation = useMutation(
     ({ subtopic, topic }: { subtopic: string; topic: string }) => postSubTopic({ subtopic, topic }),
     {
@@ -33,9 +35,8 @@ const SubTopic: React.FC<IProps> = ({ title }) => {
       localStorage.setItem(localStorageTopicKey, title);
     },
   });
-  // const { state, dispatch } = useContext(myContext) as IMyContext;
   const dispatch = useAppDispatch();
-  const state = useAppSelector(state => state.auth);
+  // const state = useAppSelector(state => state.auth);
 
   const handleSubmit = (
     e: React.MouseEvent<SVGSVGElement, MouseEvent> | React.FormEvent<HTMLFormElement>
@@ -49,8 +50,8 @@ const SubTopic: React.FC<IProps> = ({ title }) => {
   if (isSuccess) console.log("subtopic", title);
 
   return (
-    <section className="topic">
-      <div className="title">
+    <section className="sub-topic">
+      <div className="sub-topic-title">
         <p>{title}'s subtopics</p>
         <form className="add-subtopic" onSubmit={e => handleSubmit(e)}>
           <input
@@ -63,20 +64,24 @@ const SubTopic: React.FC<IProps> = ({ title }) => {
           <AddCircle sx={{ fontSize: "23" }} className="btn" onClick={e => handleSubmit(e)} />
         </form>
       </div>
-      {isSuccess &&
-        data?.data.map((el: ISubTopic, index: number) => {
-          return (
-            <div
-              className="topic-items"
-              key={index}
-              onClick={() => {
-                dispatch(viewCards({ topic: title, subTopic: el.name }));
-              }}
-            >
-              {el.name}
-            </div>
-          );
-        })}
+      <div className="list-items">
+        {isSuccess &&
+          data?.data.map((el: ISubTopic, index: number) => {
+            return (
+              <div
+                className="item"
+                key={index}
+                onClick={e => {
+                  e.preventDefault();
+                  dispatch(viewCards({ topic: title, subTopic: el.name }));
+                  navigate(routes.cards);
+                }}
+              >
+                {el.name}
+              </div>
+            );
+          })}
+      </div>
     </section>
   );
 };

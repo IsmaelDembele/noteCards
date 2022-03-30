@@ -1,11 +1,9 @@
 .nav {
-  position: absolute;
   background-color: var(--russian-green);
-  width: calc(100vw - var(--drawer-width));
-  height: var(--nav-bar-height);
-  /* z-index: -1; */
-  /* padding-left: 21rem; */
-  margin-left: var(--drawer-width);
+  height: 100;
+  width: 100%;
+
+  grid-column: 2 / end;
 
   display: flex;
   align-items: center;

@@ -6,12 +6,14 @@ import { useMutation, useQuery } from "react-query";
 import { getLogged, postLogged } from "../../apis/myApis";
 import { getToken, IAuthState, setSignin } from "../../features/authentication/authSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { routes } from "../../constantes/constantes";
 
 const Signin = () => {
   let navigate = useNavigate();
   const initialValues: IAuthState = { email: "", password: "" };
   const dispatch = useAppDispatch();
   const state = useAppSelector(state => state.auth);
+  const route = useAppSelector(state => state.app.route);
 
   // const { state, dispatch } = useContext(myContext) as IMyContext;
 
@@ -36,7 +38,7 @@ const Signin = () => {
         }
         if (data?.data) {
           dispatch(setSignin(true));
-          navigate("/");
+          navigate(route);
         } else {
           dispatch({ type: "signOut" });
         }
@@ -97,7 +99,7 @@ const Signin = () => {
         </Form>
         <hr />
         <p className="text-create-account">
-          Don't have an account? <Link to="/signup">Create an account </Link>
+          Don't have an account? <Link to={routes.signup}>Create an account </Link>
         </p>
       </div>
     </Formik>

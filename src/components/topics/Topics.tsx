@@ -1,11 +1,10 @@
-import { LinearProgress } from "@mui/material";
-import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { getTopics } from "../../apis/myApis";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { viewSubtopics } from "../../features/application/appSlice";
-// import { IMyContext, myContext } from "../../context/myContext";
 import "./topics.css";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../constantes/constantes";
 
 export interface ITopics {
   _id?: string;
@@ -15,7 +14,8 @@ export interface ITopics {
 const Topics = () => {
   // const { dispatch } = useContext(myContext) as IMyContext;
   const dispatch = useAppDispatch();
-  const state = useAppSelector(state => state.auth);
+  let navigate = useNavigate();
+  // const state = useAppSelector(state => state.auth);
 
   const { data, isError, isSuccess } = useQuery("getTopics", () => getTopics(), {
     onSuccess: data => {
@@ -29,20 +29,25 @@ const Topics = () => {
     <section className="topics">
       <div className="topics-title">Topics</div>
       {isError && <div>An error occured</div>}
-      {isSuccess &&
-        data?.data.map((el: ITopics, index: number) => {
-          return (
-            <div
-              key={index}
-              className="topics-items"
-              onClick={() => {
-                dispatch(viewSubtopics(el.name));
-              }}
-            >
-              {el.name}
-            </div>
-          );
-        })}
+      <div className="list-items">
+        {isSuccess &&
+          data?.data.map((el: ITopics, index: number) => {
+            return (
+              <div
+                key={index}
+                className="item"
+                onClick={e => {
+                  e.preventDefault();
+                  dispatch(viewSubtopics(el.name));
+                  navigate(routes.subtopic);
+                }}
+              >
+                {el.name}
+              </div>
+            );
+          })}
+        <div className="item">rnktb</div>
+      </div>
     </section>
   );
 };

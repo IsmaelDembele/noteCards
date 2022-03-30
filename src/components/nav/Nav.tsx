@@ -3,17 +3,14 @@ import { useMutation, useQueryClient } from "react-query";
 import { postTopic } from "../../apis/myApis";
 import { AddCircle } from "@mui/icons-material";
 import LinearProgress from "@mui/material/LinearProgress";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { signOut } from "../../features/authentication/authSlice";
-import { setRoute } from "../../features/application/appSlice";
-import { routes } from "../../constantes/constantes";
 import { useState } from "react";
 
 const Nav = () => {
   const queryClient = useQueryClient();
   const [inputValue, setInputValue] = useState<string>("");
   const dispatch = useAppDispatch();
-  const state = useAppSelector(state => state.auth);
   const mutation = useMutation((value: string) => postTopic(value), {
     onSuccess: data => {
       queryClient.invalidateQueries("getTopics");
@@ -47,7 +44,7 @@ const Nav = () => {
           onClick={() => {
             console.log("signing out");
             dispatch(signOut());
-            dispatch(setRoute(routes.topics));
+            // dispatch(setRoute(routes.topics));
           }}
         >
           sign out

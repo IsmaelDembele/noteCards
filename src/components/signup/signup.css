@@ -1,4 +1,5 @@
 .signup {
+  position: absolute;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -44,7 +45,6 @@
   margin-top: 2.5rem;
   height: 2.1rem;
 }
-
 
 hr {
   margin: 1rem;

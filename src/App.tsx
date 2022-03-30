@@ -1,47 +1,57 @@
-// import Signup from "./components/signup/Signup";
 import Signin from "./components/signin/Signin";
-// import Home from "./components/home/Home";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { Routes, Route, useLocation } from "react-router-dom";
 import ProtectedRoutes from "./components/ProtectedRoutes";
-// import { IMyContext, myContext } from "./context/myContext";
-import { useContext, useEffect } from "react";
 import { useAppSelector } from "./app/hooks";
 import Signup from "./components/signup/Signup";
-import Home from "./components/home/Home";
-// import Nav from "./components/nav/Nav";
-// import Topics from "./components/topics/Topics";
-// import Drawer from "./components/drawer/Drawer";
-// import SubTopic from "./components/subTopic/SubTopic";
-
-const queryClient = new QueryClient();
+import Topics from "./components/topics/Topics";
+import SubTopic from "./components/subTopic/SubTopic";
+import Nav from "./components/nav/Nav";
+import "./app.css";
+import Drawer from "./components/drawer/Drawer";
+import Cards from "./components/cards/Cards";
+import { routes } from "./constantes/constantes";
 
 const App = () => {
-  // const { state } = useContext(myContext) as IMyContext;
   const isLogged = useAppSelector(state => state.auth.isLogged);
-
-  useEffect(() => {
-    console.log("islogged", isLogged);
-  }, [isLogged]);
+  const appState = useAppSelector(state => state.app);
+  const location = useLocation();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoutes isLogged={isLogged}>
-                <Home />
-              </ProtectedRoutes>
-            }
-          />
-          <Route path="/signin" element={<Signin />} />
+    <div className="app">
+      {location.pathname === routes.signin || location.pathname === routes.signup ? "" : <Nav />}
+      {location.pathname === routes.signin || location.pathname === routes.signup ? "" : <Drawer />}
 
-          <Route path="signup" element={<Signup />} />
-        </Routes>
-      </Router>
-    </QueryClientProvider>
+      <Routes>
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoutes isLogged={isLogged}>
+              <Topics />
+            </ProtectedRoutes>
+          }
+        />
+
+        <Route
+          path="subtopic"
+          element={
+            <ProtectedRoutes isLogged={isLogged}>
+              <SubTopic title={appState.topic} />
+            </ProtectedRoutes>
+          }
+        />
+
+        <Route
+          path="/cards"
+          element={
+            <ProtectedRoutes isLogged={isLogged}>
+              <Cards topic={appState.topic} subTopic={appState.subTopic} />
+            </ProtectedRoutes>
+          }
+        />
+      </Routes>
+    </div>
   );
 };
 

@@ -46,7 +46,6 @@ export const authSlice = createSlice({
       state.email = email;
       state.firstname = firstname;
       state.lastname = lastname;
-
     },
     signOut: state => {
       localStorage.removeItem(localStorageRouteKey);
