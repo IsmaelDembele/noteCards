@@ -12,16 +12,10 @@ export interface ITopics {
 }
 
 const Topics = () => {
-  // const { dispatch } = useContext(myContext) as IMyContext;
   const dispatch = useAppDispatch();
   let navigate = useNavigate();
-  // const state = useAppSelector(state => state.auth);
 
-  const { data, isError, isSuccess } = useQuery("getTopics", () => getTopics(), {
-    onSuccess: data => {
-      console.log(data?.data);
-    },
-  });
+  const { data, isError, isSuccess } = useQuery("getTopics", () => getTopics());
 
   if (isError) return <div>Error...</div>;
 
@@ -46,7 +40,6 @@ const Topics = () => {
               </div>
             );
           })}
-        <div className="item">rnktb</div>
       </div>
     </section>
   );

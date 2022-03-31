@@ -4,48 +4,35 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQuery } from "react-query";
 import { getLogged, postLogged } from "../../apis/myApis";
-import { getToken, IAuthState, setSignin } from "../../features/authentication/authSlice";
+import { getToken, IAuthState, setSignin, signOut } from "../../features/authentication/authSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { routes } from "../../constantes/constantes";
+import { localStorageAuthTokenKey, routes } from "../../constantes/constantes";
 
 const Signin = () => {
   let navigate = useNavigate();
-  const initialValues: IAuthState = { email: "", password: "" };
+  const initialValues = { email: "", password: "" };
   const dispatch = useAppDispatch();
   const state = useAppSelector(state => state.auth);
   const route = useAppSelector(state => state.app.route);
 
-  // const { state, dispatch } = useContext(myContext) as IMyContext;
-
-  const { isError } = useQuery(
-    ["islogged", state.token, state.email, state.firstname, state.lastname],
-    () => getLogged(state.token as string, state.email),
-    {
-      onSuccess: data => {
-        if (
-          !localStorage.getItem("signInCredentials") &&
-          (state.token as string).length > 0 &&
-          state.email.length > 0
-        ) {
-          //save the token
-          const signInCredentials = {
-            token: state.token,
-            email: state.email,
-            firstname: state.firstname,
-            lastname: state.lastname,
-          };
-          localStorage.setItem("signInCredentials", JSON.stringify(signInCredentials, null, 2));
-        }
-        if (data?.data) {
-          dispatch(setSignin(true));
-          navigate(route);
-        } else {
-          dispatch({ type: "signOut" });
-        }
-      },
-      // cacheTime: 0,
-    }
-  );
+  const { isError } = useQuery(["islogged", state.token], () => getLogged(state.token as string), {
+    onSuccess: data => {
+      if (!localStorage.getItem(localStorageAuthTokenKey) && (state.token as string).length > 0) {
+        //save the token
+        const authToken = {
+          token: state.token,
+        };
+        localStorage.setItem(localStorageAuthTokenKey, JSON.stringify(authToken, null, 2));
+      }
+      if (data?.data) {
+        dispatch(setSignin(true));
+        navigate(route);
+      } else {
+        dispatch(signOut());
+      }
+    },
+    cacheTime: 1,
+  });
 
   if (isError) alert(" error ");
 
@@ -53,15 +40,10 @@ const Signin = () => {
     onSuccess: async data => {
       if (data?.data?.msg === "ok") {
         const { token, msg, email, firstname, lastname } = data?.data;
-
-        // dispatch({ type: "getToken", payload: { token, msg, email, firstname, lastname } });
         dispatch(getToken({ token, msg, email, firstname, lastname }));
-        // const result = await queryClient.fetchQuery("islogged", () => getLogged(token, email));
       }
     },
   });
-
-  // if(isSuccess) console.log(data.data);
 
   return (
     <Formik

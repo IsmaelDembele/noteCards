@@ -36,7 +36,6 @@ const SubTopic: React.FC<IProps> = ({ title }) => {
     },
   });
   const dispatch = useAppDispatch();
-  // const state = useAppSelector(state => state.auth);
 
   const handleSubmit = (
     e: React.MouseEvent<SVGSVGElement, MouseEvent> | React.FormEvent<HTMLFormElement>

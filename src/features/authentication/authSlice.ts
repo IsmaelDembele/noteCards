@@ -1,28 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   localStorageRouteKey,
-  localStorageSignInCredentialsKey,
+  localStorageAuthTokenKey,
   localStorageTopicKey,
+  routes,
+  localStorageSubTopicKey,
 } from "../../constantes/constantes";
-// import { RootState } from "../../app/store";
 
 export interface IAuthState {
   isLogged?: boolean;
-  email: string;
-  password?: string;
   token?: string;
-  firstname?: string;
-  lastname?: string;
 }
 
-const storage = JSON.parse(localStorage.getItem(localStorageSignInCredentialsKey) as string);
+const storage = JSON.parse(localStorage.getItem(localStorageAuthTokenKey) as string);
 
 const initialState: IAuthState = {
   isLogged: false,
-  email: (localStorage.getItem(localStorageSignInCredentialsKey) && storage?.email) || "",
-  token: (localStorage.getItem(localStorageSignInCredentialsKey) && storage?.token) || "",
-  firstname: (localStorage.getItem(localStorageSignInCredentialsKey) && storage?.firstname) || "", //get them from localstorage
-  lastname: (localStorage.getItem(localStorageSignInCredentialsKey) && storage?.lastname) || "",
+  token: (localStorage.getItem(localStorageAuthTokenKey) && storage?.token) || "",
 };
 
 export const authSlice = createSlice({
@@ -34,30 +28,17 @@ export const authSlice = createSlice({
       state.isLogged = action.payload;
     },
     getToken: (state, action) => {
-      const { token, email, firstname, lastname } = action.payload as {
-        token: string;
-        msg?: string | undefined;
-        email: string;
-        firstname: string;
-        lastname: string;
-      };
-
+      const { token } = action.payload as { token: string };
       state.token = token;
-      state.email = email;
-      state.firstname = firstname;
-      state.lastname = lastname;
     },
     signOut: state => {
-      localStorage.removeItem(localStorageRouteKey);
-      localStorage.removeItem(localStorageSignInCredentialsKey);
+      localStorage.setItem(localStorageRouteKey, routes.topics);
+      localStorage.removeItem(localStorageAuthTokenKey);
       localStorage.removeItem(localStorageTopicKey);
+      localStorage.removeItem(localStorageSubTopicKey);
 
       state.token = "";
-      state.email = "";
-      // state.route= "topics";
       state.isLogged = false;
-      state.firstname = "";
-      state.lastname = "";
     },
   },
 });

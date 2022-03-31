@@ -39,13 +39,12 @@ const Signup = () => {
         password: Yup.string().min(5, "Must be at least five characteres").required("Required"),
         passwordConfirm: Yup.string()
           .min(5, "Must be at least five characteres")
-          .oneOf([Yup.ref("password")], "passwords must be the same")
+          .oneOf([Yup.ref("password")], "Passwords must be the same")
           .required("Required"),
       })}
       onSubmit={(values, { resetForm }) => {
         console.log(values);
         mutation.mutate(values);
-
         resetForm();
       }}
     >

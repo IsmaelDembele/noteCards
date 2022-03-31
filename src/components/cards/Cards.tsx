@@ -1,12 +1,8 @@
 import React, { useState } from "react";
-import { useMutation } from "react-query";
-import { getCards, IReadCard } from "../../apis/myApis";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { addCards, getCards, ICards, IReadCard } from "../../apis/myApis";
+import { useAppSelector } from "../../app/hooks";
 import "./cards.css";
-
-interface ICards {
-  topic: string;
-  subTopic: string;
-}
 
 type TCard = {
   front: string;
@@ -14,14 +10,31 @@ type TCard = {
   note: string;
 };
 
-const initalvalue: TCard = { front: "", back: "", note: "" };
+const initialvalue: TCard = { front: "", back: "", note: "" };
 
 const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
   const [newCard, setNewCard] = useState(false);
-  const [card, setCard] = useState<TCard>(initalvalue);
-  const mutation = useMutation(({ topic, subTopic, front, back, note }: IReadCard) =>
-    getCards({ topic, subTopic, front, back, note })
+  const [card, setCard] = useState<TCard>(initialvalue);
+  const queryClient = useQueryClient();
+  const appState = useAppSelector(state => state.app);
+
+  const { data, isSuccess, error } = useQuery(["getCards", appState.topic, appState.subTopic], () =>
+    getCards(appState.topic, appState.subTopic)
   );
+
+  const mutation = useMutation(
+    ({ topic, subTopic, front, back, note }: IReadCard) =>
+      addCards({ topic, subTopic, front, back, note }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["getCards", appState.topic, appState.subTopic]);
+        setCard(initialvalue);
+      },
+    }
+  );
+
+  if (isSuccess) console.log("query result", data?.data);
+  if (error) console.log("query error", error);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -41,10 +54,13 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
       </div>
       {!newCard && (
         <div className="list-items">
-          <p className="item">q</p>
-          <p className="item">q</p>
-          <p className="item">q</p>
-          <p className="item">q</p>
+          {data?.data.map((el: TCard, index: number) => {
+            return (
+              <p className="item" key={index}>
+                {el.front}
+              </p>
+            );
+          })}
         </div>
       )}
 
@@ -83,7 +99,6 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
             className="btn"
             onClick={e => {
               e.preventDefault();
-              setNewCard(false);
               mutation.mutate({
                 topic: topic,
                 subTopic: subTopic,
@@ -91,6 +106,7 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
                 back: card.back,
                 note: card.note,
               });
+              setNewCard(false);
             }}
           >
             submit

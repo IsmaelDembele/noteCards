@@ -1,4 +1,4 @@
-export const localStorageSignInCredentialsKey = "signInCredentials";
+export const localStorageAuthTokenKey = "token";
 export const localStorageRouteKey = "route";
 export const localStorageTopicKey = "topic";
 export const localStorageSubTopicKey = "subTopic";
