@@ -2,6 +2,7 @@ export const localStorageAuthTokenKey = "token";
 export const localStorageRouteKey = "route";
 export const localStorageTopicKey = "topic";
 export const localStorageSubTopicKey = "subTopic";
+export const localStorageCardIdKey = "cardId";
 export const routes = {
   topics: "/",
   subtopic: "/subTopic",

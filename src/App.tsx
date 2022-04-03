@@ -10,6 +10,7 @@ import "./app.css";
 import Drawer from "./components/drawer/Drawer";
 import Cards from "./components/cards/Cards";
 import { routes } from "./constantes/constantes";
+import Card from "./components/card/Card";
 
 const App = () => {
   const isLogged = useAppSelector(state => state.auth.isLogged);
@@ -37,7 +38,7 @@ const App = () => {
           path="subtopic"
           element={
             <ProtectedRoutes isLogged={isLogged}>
-              <SubTopic title={appState.topic} />
+              <SubTopic topic={appState.topic} />
             </ProtectedRoutes>
           }
         />
@@ -47,6 +48,15 @@ const App = () => {
           element={
             <ProtectedRoutes isLogged={isLogged}>
               <Cards topic={appState.topic} subTopic={appState.subTopic} />
+            </ProtectedRoutes>
+          }
+        />
+
+        <Route
+          path="/card"
+          element={
+            <ProtectedRoutes isLogged={isLogged}>
+              <Card  />
             </ProtectedRoutes>
           }
         />

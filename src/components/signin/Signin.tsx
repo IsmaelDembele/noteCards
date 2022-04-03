@@ -7,6 +7,7 @@ import { getLogged, postLogged } from "../../apis/myApis";
 import { getToken, IAuthState, setSignin, signOut } from "../../features/authentication/authSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { localStorageAuthTokenKey, routes } from "../../constantes/constantes";
+import { setRoute } from "../../features/application/appSlice";
 
 const Signin = () => {
   let navigate = useNavigate();
@@ -28,6 +29,7 @@ const Signin = () => {
         dispatch(setSignin(true));
         navigate(route);
       } else {
+        dispatch(setRoute(routes.topics));
         dispatch(signOut());
       }
     },

@@ -1,31 +1,14 @@
-.cards {
-}
-
-.cards-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.cards .btn {
-  padding: 4px 6px;
-  outline: 1px solid transparent;
-}
-.cards .btn:hover {
-  outline: 1px solid white;
-}
-
-/* .newCard {
+.newCard {
   width: 100%;
-  grid-column: 1 / end;
+  /* grid-column: 1 / end; */
   grid-row: 2 / 4;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-} */
-/* 
+  justify-content: center;
+}
+
 .cards-text {
   width: 100%;
   display: flex;
@@ -45,5 +28,6 @@
 
 .newCard .btn {
   height: 2.5rem;
+  margin-top: 3rem;
   padding: 0.1rem 6rem;
-} */
+}

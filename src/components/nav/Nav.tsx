@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { postTopic } from "../../apis/myApis";
 import { AddCircle } from "@mui/icons-material";
 import LinearProgress from "@mui/material/LinearProgress";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { signOut } from "../../features/authentication/authSlice";
 import { useState } from "react";
 
@@ -11,17 +11,22 @@ const Nav = () => {
   const queryClient = useQueryClient();
   const [inputValue, setInputValue] = useState<string>("");
   const dispatch = useAppDispatch();
-  const mutation = useMutation((value: string) => postTopic(value), {
-    onSuccess: data => {
-      queryClient.invalidateQueries("getTopics");
-    },
-  });
+  const token = useAppSelector(state => state.auth.token);
+
+  const mutation = useMutation(
+    ({ topic, token }: { topic: string; token: string }) => postTopic({ topic, token }),
+    {
+      onSuccess: data => {
+        queryClient.invalidateQueries("getTopics");
+      },
+    }
+  );
 
   const handleSubmit = (
     e: React.MouseEvent<SVGSVGElement, MouseEvent> | React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
-    mutation.mutate(inputValue);
+    mutation.mutate({ topic: inputValue, token: token as string });
     setInputValue("");
   };
 

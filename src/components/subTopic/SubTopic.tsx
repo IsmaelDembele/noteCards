@@ -3,13 +3,13 @@ import { AddCircle } from "@mui/icons-material";
 import "./subTopic.css";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getSubTopic, postSubTopic } from "../../apis/myApis";
-import { localStorageTopicKey, routes } from "../../constantes/constantes";
-import { useAppDispatch } from "../../app/hooks";
+import { routes } from "../../constantes/constantes";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewCards } from "../../features/application/appSlice";
 import { useNavigate } from "react-router-dom";
 
 interface IProps {
-  title: string;
+  topic: string;
 }
 
 interface ISubTopic {
@@ -18,23 +18,24 @@ interface ISubTopic {
   topicID: string;
 }
 
-const SubTopic: React.FC<IProps> = ({ title }) => {
+const SubTopic: React.FC<IProps> = ({ topic }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const queryClient = useQueryClient();
   let navigate = useNavigate();
+  const token = useAppSelector(state => state.auth.token) as string;
+
   const mutation = useMutation(
-    ({ subtopic, topic }: { subtopic: string; topic: string }) => postSubTopic({ subtopic, topic }),
+    ({ subtopic, topic, token }: { subtopic: string; topic: string; token: string }) =>
+      postSubTopic({ subtopic, topic, token }),
     {
       onSuccess: () => {
         queryClient.invalidateQueries("getSubtopic");
       },
     }
   );
-  const { data, isSuccess } = useQuery(["getSubtopic", title], () => getSubTopic(title), {
-    onSuccess: () => {
-      localStorage.setItem(localStorageTopicKey, title);
-    },
-  });
+  const { data, isSuccess } = useQuery(["getSubtopic", topic, token], () =>
+    getSubTopic(topic, token)
+  );
   const dispatch = useAppDispatch();
 
   const handleSubmit = (
@@ -42,16 +43,14 @@ const SubTopic: React.FC<IProps> = ({ title }) => {
   ) => {
     e.preventDefault();
 
-    mutation.mutate({ subtopic: inputValue as string, topic: title });
+    mutation.mutate({ subtopic: inputValue as string, topic: topic, token: token as string });
     setInputValue("");
   };
-
-  if (isSuccess) console.log("subtopic", title);
 
   return (
     <section className="sub-topic">
       <div className="sub-topic-title">
-        <p>{title}'s subtopics</p>
+        <p>{topic}'s subtopics</p>
         <form className="add-subtopic" onSubmit={e => handleSubmit(e)}>
           <input
             type="text"
@@ -72,7 +71,7 @@ const SubTopic: React.FC<IProps> = ({ title }) => {
                 key={index}
                 onClick={e => {
                   e.preventDefault();
-                  dispatch(viewCards({ topic: title, subTopic: el.name }));
+                  dispatch(viewCards({ topic: topic, subTopic: el.name }));
                   navigate(routes.cards);
                 }}
               >

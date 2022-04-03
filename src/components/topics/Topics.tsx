@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { getTopics } from "../../apis/myApis";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewSubtopics } from "../../features/application/appSlice";
 import "./topics.css";
 import { useNavigate } from "react-router-dom";
@@ -14,8 +14,9 @@ export interface ITopics {
 const Topics = () => {
   const dispatch = useAppDispatch();
   let navigate = useNavigate();
+  const token = useAppSelector(state => state.auth.token) as string;
 
-  const { data, isError, isSuccess } = useQuery("getTopics", () => getTopics());
+  const { data, isError, isSuccess } = useQuery(["getTopics", token], () => getTopics(token));
 
   if (isError) return <div>Error...</div>;
 
@@ -25,6 +26,7 @@ const Topics = () => {
       {isError && <div>An error occured</div>}
       <div className="list-items">
         {isSuccess &&
+          typeof data?.data === "object" &&
           data?.data.map((el: ITopics, index: number) => {
             return (
               <div
