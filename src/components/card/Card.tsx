@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { getCard } from "../../apis/myApis";
+import { useMutation, useQuery } from "react-query";
+import { deleteCard, getCard } from "../../apis/myApis";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import "./card.css";
 import ArrowCircleLeftTwoToneIcon from "@mui/icons-material/ArrowCircleLeftTwoTone";
@@ -13,15 +13,11 @@ import CreateEditCard from "../createEditCard/CreateEditCard";
 // import SubTopic from "../subTopic/SubTopic";
 import { nextCard, previousCard, viewCards } from "../../features/application/appSlice";
 
-interface ICard {
-  // cardIndex: string;
-}
-
-const Card: React.FC<ICard> = () => {
+const Card: React.FC = () => {
   const dispatch = useAppDispatch();
   const [side, setSide] = useState<boolean>(true);
   const [edit, setEdit] = useState<boolean>(false);
-  const [currentCart, setCurrentCard] = useState<any>();
+  const [currentCard, setCurrentCard] = useState<any>();
   const [validArrowRight, setValidArrowRight] = useState<boolean>();
   const [validArrowLeft, setValidArrowLeft] = useState<boolean>();
   let navigate = useNavigate();
@@ -29,6 +25,15 @@ const Card: React.FC<ICard> = () => {
   const token = useAppSelector(state => state.auth.token);
   const { data, isSuccess } = useQuery(["getCard", appState.topic, appState.subTopic, token], () =>
     getCard(appState.topic, appState.subTopic, token as string)
+  );
+  const deleteMutation = useMutation(
+    ({ token, cardID }: { token: string; cardID: string }) => deleteCard(token, cardID),
+    {
+      onSuccess: () => {
+        navigate(routes.cards);
+        dispatch(viewCards(appState));
+      },
+    }
   );
 
   useEffect(() => {
@@ -40,8 +45,6 @@ const Card: React.FC<ICard> = () => {
     }
     // console.log(appState.cardIndex, "card index");
   }, [appState.cardIndex, data?.data, isSuccess]);
-
-  // if (data?.data[1]) console.log("define");
 
   return (
     <>
@@ -89,6 +92,16 @@ const Card: React.FC<ICard> = () => {
               Edit
             </button>
           </div>
+          <div className="btn_delete">
+            <button
+              className="btn"
+              onClick={() => {
+                deleteMutation.mutate({ token: token as string, cardID: currentCard._id });
+              }}
+            >
+              Delete
+            </button>
+          </div>
 
           <div className="flip_side">
             <span>
@@ -103,24 +116,24 @@ const Card: React.FC<ICard> = () => {
 
           <p className="side">{side ? "Front" : "Back"}</p>
           <pre className="display_text">
-            {side && currentCart?.front}
-            {!side && currentCart?.back}
+            {side && currentCard?.front}
+            {!side && currentCard?.back}
           </pre>
 
           <p className="note">note</p>
-          <div className="display_note">{currentCart?.note}</div>
+          <div className="display_note">{currentCard?.note}</div>
         </section>
       )}
 
       {edit && (
         <CreateEditCard
-          topic={data?.data.topic}
-          subTopic={data?.data.subTopic}
+          topic={currentCard.topic}
+          subTopic={currentCard.subTopic}
           setEdit={setEdit}
-          front={data?.data.front}
-          back={data?.data.back}
-          note={data?.data.note}
-          // cardID={cardID}
+          front={currentCard.front}
+          back={currentCard.back}
+          note={currentCard.note}
+          cardID={currentCard._id}
         />
       )}
     </>

@@ -10,21 +10,24 @@
   justify-content: space-around;
 }
 
+.nav-form {
+  margin-left: 15%;
+  /* background-color: blue; */
+  display: flex;
+  /* width: 16%; */
+  align-items: center;
+  height: 2.1rem;
+}
+
 .nav-btn {
+  margin-left: auto;
+  margin-right: 15%;
   width: 10rem;
   text-align: center;
   font-weight: 400;
   font-size: 1.4rem;
   border-radius: 2px;
   text-transform: uppercase;
-}
-
-.nav-form {
-  /* background-color: blue; */
-  display: flex;
-  /* width: 16%; */
-  align-items: center;
-  height: 2.1rem;
 }
 
 .nav-input {
@@ -44,4 +47,12 @@
 }
 .nav-add-btn:hover {
   color: var(--tea-green);
+}
+
+.card-nav-btn {
+  border-radius: .25rem;
+  font-weight: 400;
+  text-transform: capitalize;
+  padding-left: 2em;
+  padding-right: 2rem;
 }

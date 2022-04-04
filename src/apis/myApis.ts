@@ -29,6 +29,10 @@ const pathRoutes = {
   ADD_CARDS: "/addCards",
   GET_CARD: "/getCard",
   UPDATE_CARD: "/updateCard",
+  DELETE_TOPICS: "/deleteTopics",
+  DELETE_SUB_TOPICS: "/deleteSubTopics",
+  DELETE_CARD: "/deleteCard",
+  DELETE_CARDS: "/deleteCards",
 };
 
 export const getCard = async (topic: string, subTopic: string, token: string) => {
@@ -116,15 +120,6 @@ export const updateCard = async (
   token: string,
   cardID: string
 ) => {
-  console.log({
-    topic,
-    subTopic,
-    front,
-    back,
-    note,
-    token,
-  });
-
   return await axios.post(`http://localhost:5000${pathRoutes.UPDATE_CARD}`, {
     topic,
     subTopic,
@@ -133,5 +128,24 @@ export const updateCard = async (
     note,
     token,
     cardID,
+  });
+};
+
+export const deleteCard = async (token: string, cardID: string) => {
+  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_CARD}`, { token, cardID });
+};
+
+export const deleteTopics = async (token: string) => {
+  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_TOPICS}`, { token });
+};
+
+export const deleteSubTopics = async (token: string, topic: string) => {
+  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_SUB_TOPICS}`, { token, topic });
+};
+export const deleteCards = async (token: string, topic: string, subTopic: string) => {
+  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_CARDS}`, {
+    token,
+    topic,
+    subTopic,
   });
 };

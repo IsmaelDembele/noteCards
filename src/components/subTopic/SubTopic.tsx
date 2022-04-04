@@ -1,8 +1,6 @@
-import React, { useState } from "react";
-import { AddCircle } from "@mui/icons-material";
 import "./subTopic.css";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getSubTopic, postSubTopic } from "../../apis/myApis";
+import { deleteSubTopics, getSubTopic } from "../../apis/myApis";
 import { routes } from "../../constantes/constantes";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewCards } from "../../features/application/appSlice";
@@ -19,48 +17,37 @@ interface ISubTopic {
 }
 
 const SubTopic: React.FC<IProps> = ({ topic }) => {
-  const [inputValue, setInputValue] = useState<string>("");
   const queryClient = useQueryClient();
   let navigate = useNavigate();
   const token = useAppSelector(state => state.auth.token) as string;
 
   const mutation = useMutation(
-    ({ subtopic, topic, token }: { subtopic: string; topic: string; token: string }) =>
-      postSubTopic({ subtopic, topic, token }),
+    ({ token, topic }: { token: string; topic: string }) => deleteSubTopics(token, topic),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("getSubtopic");
+        // queryClient.invalidateQueries("getSubtopic");
+        queryClient.invalidateQueries(["getSubtopic", topic, token]);
       },
     }
   );
+
   const { data, isSuccess } = useQuery(["getSubtopic", topic, token], () =>
     getSubTopic(topic, token)
   );
   const dispatch = useAppDispatch();
 
-  const handleSubmit = (
-    e: React.MouseEvent<SVGSVGElement, MouseEvent> | React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
-
-    mutation.mutate({ subtopic: inputValue as string, topic: topic, token: token as string });
-    setInputValue("");
-  };
-
   return (
     <section className="sub-topic">
       <div className="sub-topic-title">
         <p>{topic}'s subtopics</p>
-        <form className="add-subtopic" onSubmit={e => handleSubmit(e)}>
-          <input
-            type="text"
-            placeholder="Enter a new subTopic"
-            className="input"
-            value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
-          />
-          <AddCircle sx={{ fontSize: "23" }} className="btn" onClick={e => handleSubmit(e)} />
-        </form>
+        <button
+          className="btn"
+          onClick={() => {
+            mutation.mutate({ token, topic });
+          }}
+        >
+          Delete SubTopics
+        </button>
       </div>
       <div className="list-items">
         {isSuccess &&

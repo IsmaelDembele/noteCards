@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { addCards, ICards, IReadCard, updateCard } from "../../apis/myApis";
-import { useAppSelector } from "../../app/hooks";
+import { addCards, IReadCard, updateCard } from "../../apis/myApis";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { setNewCard } from "../../features/application/appSlice";
 import { TCard } from "../cards/Cards";
 import "./CreateEditCard.css";
 
@@ -25,12 +26,13 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
   back,
   note,
   cardID,
-  setNewCard,
+  // setNewCard,
   setEdit,
 }) => {
   const [card, setCard] = useState<TCard>(initialvalue);
   const token = useAppSelector(state => state.auth.token) as string;
   const appState = useAppSelector(state => state.app);
+  const dispatch = useAppDispatch();
 
   const queryClient = useQueryClient();
 
@@ -60,7 +62,8 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
       ),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["getCard", cardID, token]);
+        queryClient.invalidateQueries(["getCard", appState.topic, appState.subTopic, token]);
+
         setCard(initialvalue);
         setEdit && setEdit(false);
       },
@@ -71,6 +74,7 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
     if (setEdit) {
       setCard({ front: front as string, back: back as string, note: note as string });
     }
+    // eslint-disable-next-line 
   }, [setCard]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -84,7 +88,7 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    if (setNewCard) {
+    if (!setEdit) {
       console.log("new");
 
       mutation.mutate({
@@ -95,9 +99,8 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
         note: card.note,
         token: token,
       });
-      // setNewCard(false);
-    }
-    if (setEdit) {
+      dispatch(setNewCard(false));
+    } else {
       // setEdit(false);
       console.log("edit");
 

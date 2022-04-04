@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { getCards, ICards } from "../../apis/myApis";
+import { deleteCards, getCards, ICards, IReadCard } from "../../apis/myApis";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { routes } from "../../constantes/constantes";
-import { viewCard } from "../../features/application/appSlice";
+import { viewCard, setNewCard } from "../../features/application/appSlice";
 import CreateEditCard from "../createEditCard/CreateEditCard";
 import "./cards.css";
 
@@ -16,29 +15,44 @@ export type TCard = {
 };
 
 const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
-  const [newCard, setNewCard] = useState(false);
   const appState = useAppSelector(state => state.app);
   const token = useAppSelector(state => state.auth.token) as string;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   const { data, error } = useQuery(["getCards", appState.topic, appState.subTopic, token], () =>
     getCards(appState.topic, appState.subTopic, token)
   );
 
-  if (error) console.log("query error", error);
+  const deleteCardsMutation = useMutation(
+    ({ token, topic, subTopic }: IReadCard) => deleteCards(token as string, topic, subTopic),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["getCards", appState.topic, appState.subTopic, token]);
+      },
+    }
+  );
 
-  // console.log(data?.data);
+  if (error) console.log("query error", error);
 
   return (
     <section className="cards">
       <div className="cards-title">
         {topic}/{subTopic}
-        <button className="btn" onClick={() => setNewCard(true)}>
+        {/* <button className="btn" onClick={() => dispatch(setNewCard(false))}>
           Add a new card
+        </button> */}
+        <button
+          className="btn"
+          onClick={() => {
+            deleteCardsMutation.mutate({ token, topic, subTopic });
+          }}
+        >
+          Delete Cards
         </button>
       </div>
-      {!newCard && (
+      {!appState.newCard && (
         <div className="list-items">
           {typeof data?.data !== "string" &&
             data?.data?.map((el: TCard, index: number) => {
@@ -58,7 +72,9 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
         </div>
       )}
 
-      {newCard && <CreateEditCard topic={topic} subTopic={subTopic} setNewCard={setNewCard} />}
+      {appState.newCard && (
+        <CreateEditCard topic={topic} subTopic={subTopic} setNewCard={setNewCard} />
+      )}
     </section>
   );
 };

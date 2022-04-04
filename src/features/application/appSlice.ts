@@ -14,6 +14,7 @@ export interface IAppState {
   subTopic: string;
   cardID: string;
   cardIndex: number;
+  newCard: false;
 }
 
 const initialState: IAppState = {
@@ -22,6 +23,7 @@ const initialState: IAppState = {
   subTopic: localStorage.getItem(localStorageSubTopicKey) || "",
   cardID: localStorage.getItem(localStorageCardIdKey) || "",
   cardIndex: -1,
+  newCard: false,
 };
 
 export const appSlice = createSlice({
@@ -46,6 +48,7 @@ export const appSlice = createSlice({
       state.route = routes.cards;
       state.topic = action.payload.topic;
       state.subTopic = action.payload.subTopic;
+      state.newCard = false;
     },
     viewCard: (state, action) => {
       localStorage.setItem(localStorageRouteKey, routes.card);
@@ -61,6 +64,9 @@ export const appSlice = createSlice({
     previousCard: state => {
       state.cardIndex = state.cardIndex - 1;
     },
+    setNewCard: (state, action) => {
+      state.newCard = action.payload;
+    },
     review: state => {
       localStorage.removeItem(localStorageRouteKey);
       localStorage.removeItem(localStorageTopicKey);
@@ -72,7 +78,15 @@ export const appSlice = createSlice({
   },
 });
 
-export const { viewSubtopics, viewCards, review, setRoute, viewCard, nextCard, previousCard } =
-  appSlice.actions;
+export const {
+  viewSubtopics,
+  viewCards,
+  review,
+  setRoute,
+  viewCard,
+  nextCard,
+  previousCard,
+  setNewCard,
+} = appSlice.actions;
 
 export default appSlice.reducer;

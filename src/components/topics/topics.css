@@ -4,5 +4,14 @@
 .topics-title {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+}
+
+.topics .btn {
+  padding: 0 1rem;
+  border: 1px solid transparent;
+  transition: all 0.4s;
+}
+.topics .btn:hover {
+  border: 1px solid #fff;
 }

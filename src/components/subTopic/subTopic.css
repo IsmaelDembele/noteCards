@@ -6,17 +6,18 @@
   justify-content: space-around;
 }
 
-.sub-topic .sub-topic-title .btn {
-  width: 20%;
-  height: auto;
-  border-radius: 3px;
-  padding: 5px 3px;
-  transition: all 0.3s;
+.sub-topic-title .btn {
+  padding: 0 1rem;
+  border: 1px solid transparent;
+  transition: all 0.4s;
+}
+.sub-topic-title .btn:hover {
+  border: 1px solid #fff;
 }
 
 .sub-topic .sub-topic-title .btn:hover {
   background-color: var(--laurel-green);
-}
+} */
 
 .sub-topic .sub-topic-title .add-subtopic {
   width: auto;
@@ -25,7 +26,7 @@
   justify-content: center;
 }
 
-.sub-topic .sub-topic-title .btn {
+/* .sub-topic .sub-topic-title .btn {
   background-color: transparent;
   height: 3.5rem;
   color: var(--russian-green);
@@ -36,7 +37,7 @@
   height: 3.5rem;
   color: var(--moss-green);
   margin-left: 1rem;
-}
+} */
 
 .sub-topic .input {
   height: 2rem;
