@@ -115,10 +115,14 @@ const Card: React.FC = () => {
           </div>
 
           <p className="side">{side ? "Front" : "Back"}</p>
-          <pre className="display_text">
-            {side && currentCard?.front}
-            {!side && currentCard?.back}
-          </pre>
+          <div className={`display_text  ${side ? "" : "flip"}`}>
+            <div className="text_front ">
+              <pre>{currentCard?.front}</pre>
+            </div>
+            <div className="text_back">
+              <pre>{currentCard?.back}</pre>
+            </div>
+          </div>
 
           <p className="note">note</p>
           <div className="display_note">{currentCard?.note}</div>

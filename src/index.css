@@ -2,10 +2,11 @@
   --text-color-darker: #222;
   --text-color: #444;
   --text-color-lighter: #ddd;
-  
+
   --nav-bar-height: 6rem;
   --drawer-width: 20rem;
   --form-width: 25rem;
+  --rotate-y: 0;
 
   /* CSS HEX */
   --nyanza: #e9f5dbff;
@@ -23,7 +24,6 @@
   --btn-font-lighter: #777;
 
   --color-error: #fff;
-
 }
 
 *,
@@ -90,7 +90,9 @@ a {
   gap: 3rem;
 }
 
-.topics-title, .sub-topic-title, .cards-title{
+.topics-title,
+.sub-topic-title,
+.cards-title {
   background-color: var(--tea-green);
   grid-row: 1 / 2;
   grid-column: 1 / end;

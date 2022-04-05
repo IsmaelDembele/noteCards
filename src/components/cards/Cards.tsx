@@ -40,12 +40,10 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
     <section className="cards">
       <div className="cards-title">
         {topic}/{subTopic}
-        {/* <button className="btn" onClick={() => dispatch(setNewCard(false))}>
-          Add a new card
-        </button> */}
         <button
           className="btn"
           onClick={() => {
+            const result = prompt("This will delete all the Cards: type DELETE to continue");
             deleteCardsMutation.mutate({ token, topic, subTopic });
           }}
         >

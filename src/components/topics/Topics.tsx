@@ -33,13 +33,16 @@ const Topics = () => {
         <button
           className="btn"
           onClick={() => {
-            const result = prompt(`This action is final. Type 'DELETE' to continue ?`);
+            const result = prompt(
+              "This will delete all the Topics and Subtopics: type DELETE to continue"
+            );
             result === "DELETE" && deleteTopicsMutation.mutate(token);
           }}
         >
           Delete Topics
         </button>
       </div>
+
       {isError && <div>An error occured</div>}
       <div className="list-items">
         {isSuccess &&

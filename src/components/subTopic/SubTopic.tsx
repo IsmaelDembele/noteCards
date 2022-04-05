@@ -43,7 +43,8 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
         <button
           className="btn"
           onClick={() => {
-            mutation.mutate({ token, topic });
+            const result = prompt("This will delete all the subtopics: type DELETE to continue");
+            result === "DELETE" && mutation.mutate({ token, topic });
           }}
         >
           Delete SubTopics
