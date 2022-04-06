@@ -17,27 +17,13 @@
 
 .sub-topic .sub-topic-title .btn:hover {
   background-color: var(--laurel-green);
-} */
-
-.sub-topic .sub-topic-title .add-subtopic {
+}
+*/ .sub-topic .sub-topic-title .add-subtopic {
   width: auto;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-/* .sub-topic .sub-topic-title .btn {
-  background-color: transparent;
-  height: 3.5rem;
-  color: var(--russian-green);
-  margin-left: 1rem;
-}
-.sub-topic .sub-topic-title .btn:hover {
-  background-color: transparent;
-  height: 3.5rem;
-  color: var(--moss-green);
-  margin-left: 1rem;
-} */
 
 .sub-topic .input {
   height: 2rem;

@@ -1,6 +1,5 @@
 .newCard {
   width: 100%;
-  /* grid-column: 1 / end; */
   grid-row: 2 / 4;
 
   display: flex;

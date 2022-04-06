@@ -10,25 +10,8 @@ type TMyModal = {
   visibility: boolean;
   data: [object];
   openModal: React.Dispatch<React.SetStateAction<boolean>>;
-  renameItem: UseMutationResult<
-    AxiosResponse<any, any>,
-    unknown,
-    {
-      token: string;
-      topic: string;
-      newTopic: string;
-    },
-    unknown
-  >;
-  deleteItem: UseMutationResult<
-    AxiosResponse<any, any>,
-    unknown,
-    {
-      topic: string;
-      token: string;
-    },
-    unknown
-  >;
+  renameItem: any;
+  deleteItem: any;
 };
 
 const MyModal: React.FC<TMyModal> = ({
@@ -42,6 +25,7 @@ const MyModal: React.FC<TMyModal> = ({
   const [selectItem, setSelectItem] = useState<string>("");
   const [newName, setNewName] = useState<string>("");
   const token = useAppSelector(state => state.auth.token) as string;
+  const topic = useAppSelector(state => state.app.topic) as string;
 
   return (
     <div className={`modal ${visibility ? "visible" : ""} `}>
@@ -79,7 +63,12 @@ const MyModal: React.FC<TMyModal> = ({
                 : "rename-topic-button btn inactif"
             }
             onClick={() => {
-              renameItem.mutate({ token: token, topic: selectItem, newTopic: newName });
+              if (item === "Topic") {
+                renameItem.mutate({ token: token, topic: selectItem, newTopic: newName });
+              }
+              if (item === "SubTopic") {
+                renameItem.mutate({ token, topic, subTopic: selectItem, newSubTopic: newName });
+              }
               setNewName("");
             }}
             disabled={newName === ""}
@@ -93,7 +82,12 @@ const MyModal: React.FC<TMyModal> = ({
             }
             disabled={selectItem === ""}
             onClick={() => {
-              deleteItem.mutate({ topic: selectItem, token: token });
+              if (item === "Topic") {
+                deleteItem.mutate({ topic: selectItem, token: token });
+              }
+              if (item === "SubTopic") {
+                deleteItem.mutate({ token, topic, subTopic: selectItem });
+              }
               setSelectItem("");
             }}
           >

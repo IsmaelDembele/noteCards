@@ -1,6 +1,5 @@
 .modal {
   display: none;
-  /* visibility:visible; */
   width: 25rem;
   height: 22rem;
   border: 2px solid var(--nyanza);
@@ -11,7 +10,6 @@
   top: 40%;
   transform: translate(-30%, -50%);
   z-index: 1001;
-  /* opacity: 1 !important; */
 }
 
 .visible {

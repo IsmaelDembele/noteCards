@@ -6,6 +6,11 @@
   align-items: center;
   justify-content: space-around;
 }
+.cards-title p {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
 
 .cards .btn {
   padding: 4px 6px;
@@ -14,36 +19,3 @@
 .cards .btn:hover {
   outline: 1px solid white;
 }
-
-/* .newCard {
-  width: 100%;
-  grid-column: 1 / end;
-  grid-row: 2 / 4;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-} */
-/* 
-.cards-text {
-  width: 100%;
-  display: flex;
-  align-items: space-between;
-  justify-content: space-around;
-}
-.cards-text textarea {
-  padding: 3px;
-  border-radius: 3px;
-  border: none;
-  outline: 1px solid var(--tea-green);
-}
-
-.cards-text textarea:focus {
-  outline: 2px solid var(--tea-green);
-}
-
-.newCard .btn {
-  height: 2.5rem;
-  padding: 0.1rem 6rem;
-} */

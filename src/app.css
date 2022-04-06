@@ -6,4 +6,6 @@
   grid-template-rows: 6rem 1fr;
   grid-template-columns: 20rem 1fr;
   grid-auto-rows: 10rem;
+
+  background: linear-gradient(to bottom right, #fff 70% , var(--bg));
 }

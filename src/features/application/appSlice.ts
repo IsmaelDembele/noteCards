@@ -6,7 +6,6 @@ import {
   localStorageTopicKey,
   routes,
 } from "../../constantes/constantes";
-// import { RootState } from "../../app/store";
 
 export interface IAppState {
   route: string;
@@ -55,7 +54,6 @@ export const appSlice = createSlice({
       localStorage.setItem(localStorageCardIdKey, action.payload);
 
       state.route = routes.card;
-      // state.cardID = action.payload;
       state.cardIndex = action.payload;
     },
     nextCard: state => {

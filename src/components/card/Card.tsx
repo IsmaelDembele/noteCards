@@ -10,7 +10,6 @@ import ChangeCircleTwoToneIcon from "@mui/icons-material/ChangeCircleTwoTone";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../constantes/constantes";
 import CreateEditCard from "../createEditCard/CreateEditCard";
-// import SubTopic from "../subTopic/SubTopic";
 import { nextCard, previousCard, viewCards } from "../../features/application/appSlice";
 
 const Card: React.FC = () => {
@@ -38,12 +37,10 @@ const Card: React.FC = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      // console.log("data array", data?.data[appState.cardIndex]);
       setCurrentCard(data?.data[appState.cardIndex]);
       setValidArrowRight(data?.data[appState.cardIndex + 1]);
       setValidArrowLeft(data?.data[appState.cardIndex - 1]);
     }
-    // console.log(appState.cardIndex, "card index");
   }, [appState.cardIndex, data?.data, isSuccess]);
 
   return (

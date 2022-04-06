@@ -26,7 +26,6 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
   back,
   note,
   cardID,
-  // setNewCard,
   setEdit,
 }) => {
   const [card, setCard] = useState<TCard>(initialvalue);
@@ -74,7 +73,7 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
     if (setEdit) {
       setCard({ front: front as string, back: back as string, note: note as string });
     }
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
   }, [setCard]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

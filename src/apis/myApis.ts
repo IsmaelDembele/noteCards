@@ -32,9 +32,11 @@ const pathRoutes = {
   DELETE_TOPICS: "/deleteTopics",
   DELETE_TOPIC: "/deleteTopic",
   DELETE_SUB_TOPICS: "/deleteSubTopics",
+  DELETE_SUB_TOPIC: "/deleteSubTopic",
   DELETE_CARD: "/deleteCard",
   DELETE_CARDS: "/deleteCards",
   RENAME_TOPIC: "/renameTopic",
+  RENAME_SUB_TOPIC: "/renameSubTopic",
 };
 
 export const getCard = async (topic: string, subTopic: string, token: string) => {
@@ -156,10 +158,33 @@ export const deleteCards = async (token: string, topic: string, subTopic: string
 export const deleteTopic = async (topic: string, token: string) => {
   return await axios.post(`http://localhost:5000${pathRoutes.DELETE_TOPIC}`, { token, topic });
 };
+
 export const renameTopic = async (token: string, topic: string, newTopic: string) => {
   return await axios.post(`http://localhost:5000${pathRoutes.RENAME_TOPIC}`, {
     token,
     topic,
     newTopic,
+  });
+};
+
+export const deleteSubTopic = async (token: string, topic: string, subTopic: string) => {
+  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_SUB_TOPIC}`, {
+    token,
+    topic,
+    subTopic,
+  });
+};
+
+export const renameSubTopic = async (
+  token: string,
+  topic: string,
+  subTopic: string,
+  newSubTopic: string
+) => {
+  return await axios.post(`http://localhost:5000${pathRoutes.RENAME_SUB_TOPIC}`, {
+    token,
+    topic,
+    subTopic,
+    newSubTopic,
   });
 };

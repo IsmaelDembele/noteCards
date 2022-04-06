@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { routes } from "../../constantes/constantes";
 import { viewCard, setNewCard } from "../../features/application/appSlice";
 import CreateEditCard from "../createEditCard/CreateEditCard";
+import ArrowRightRoundedIcon from "@mui/icons-material/ArrowRightRounded";
 import "./cards.css";
 
 export type TCard = {
@@ -39,7 +40,9 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
   return (
     <section className="cards">
       <div className="cards-title">
-        {topic}/{subTopic}
+        <p>
+          {topic} <ArrowRightRoundedIcon sx={{ fontSize: "40px", color: '#fff' }} /> {subTopic}
+        </p>
         <button
           className="btn"
           onClick={() => {
