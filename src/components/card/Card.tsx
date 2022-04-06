@@ -117,10 +117,10 @@ const Card: React.FC = () => {
           <p className="side">{side ? "Front" : "Back"}</p>
           <div className={`display_text  ${side ? "" : "flip"}`}>
             <div className="text_front ">
-              <pre>{currentCard?.front}</pre>
+              <pre style={{ fontFamily: "var(--font)" }}>{currentCard?.front}</pre>
             </div>
             <div className="text_back">
-              <pre>{currentCard?.back}</pre>
+              <pre style={{ fontFamily: "var(--font)" }}>{currentCard?.back}</pre>
             </div>
           </div>
 

@@ -24,6 +24,9 @@
   --btn-font-lighter: #777;
 
   --color-error: #fff;
+
+  --font: "Open Sans", source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace,
+    sans-serif;
 }
 
 *,
@@ -40,8 +43,7 @@ html {
 }
 
 body {
-  font-family: "Open Sans", source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace,
-    sans-serif;
+  font-family: var(--font);
   font-size: 1.6rem;
   font-weight: 400;
   color: var(--text-color);
