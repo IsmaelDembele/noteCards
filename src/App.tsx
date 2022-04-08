@@ -11,6 +11,8 @@ import Drawer from "./components/drawer/Drawer";
 import Cards from "./components/cards/Cards";
 import { routes } from "./constantes/constantes";
 import Card from "./components/card/Card";
+import Test from "./components/test/Test";
+import TestOption from "./components/testOptions/TestOptions";
 
 const App = () => {
   const isLogged = useAppSelector(state => state.auth.isLogged);
@@ -56,7 +58,24 @@ const App = () => {
           path="/card"
           element={
             <ProtectedRoutes isLogged={isLogged}>
-              <Card  />
+              <Card />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/test"
+          element={
+            <ProtectedRoutes isLogged={isLogged}>
+              <Test />
+            </ProtectedRoutes>
+          }
+        />
+
+        <Route
+          path="/testOptions:id"
+          element={
+            <ProtectedRoutes isLogged={isLogged}>
+              <TestOption />
             </ProtectedRoutes>
           }
         />

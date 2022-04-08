@@ -10,5 +10,14 @@ export const routes = {
   card: "/card",
   signin: "/signin",
   signup: "/signup",
+  test: "/test",
+  testOptions: "/testOPtions",
 };
+
+export const testMenu = {
+  everything: "everything",
+  topics: "topics",
+  subtopics: "subtopics",
+};
+
 export let currentSubTopic: string = "";

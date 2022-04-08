@@ -50,7 +50,7 @@ export const appSlice = createSlice({
       state.newCard = false;
     },
     viewCard: (state, action) => {
-      localStorage.setItem(localStorageRouteKey, routes.card);
+      // localStorage.setItem(localStorageRouteKey, routes.card);
       localStorage.setItem(localStorageCardIdKey, action.payload);
 
       state.route = routes.card;
@@ -64,6 +64,14 @@ export const appSlice = createSlice({
     },
     setNewCard: (state, action) => {
       state.newCard = action.payload;
+    },
+    test: state => {
+      localStorage.setItem(localStorageRouteKey, routes.test);
+      localStorage.removeItem(localStorageTopicKey);
+      localStorage.removeItem(localStorageSubTopicKey);
+      localStorage.removeItem(localStorageCardIdKey);
+
+      state.route = routes.test;
     },
     review: state => {
       localStorage.removeItem(localStorageRouteKey);
@@ -85,6 +93,7 @@ export const {
   nextCard,
   previousCard,
   setNewCard,
+  test,
 } = appSlice.actions;
 
 export default appSlice.reducer;

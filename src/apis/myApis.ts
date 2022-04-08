@@ -37,6 +37,7 @@ const pathRoutes = {
   DELETE_CARDS: "/deleteCards",
   RENAME_TOPIC: "/renameTopic",
   RENAME_SUB_TOPIC: "/renameSubTopic",
+  GET_ALL_CARDS: "/getAllCards",
 };
 
 export const getCard = async (topic: string, subTopic: string, token: string) => {
@@ -187,4 +188,8 @@ export const renameSubTopic = async (
     subTopic,
     newSubTopic,
   });
+};
+
+export const getAllCards = async (token: string) => {
+  return await axios.post(`http://localhost:5000${pathRoutes.GET_ALL_CARDS}`, { token });
 };

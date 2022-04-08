@@ -52,7 +52,7 @@ const Topics = () => {
   if (isError) return <div>Error...</div>;
 
   return (
-    <section className="topics">
+    <section className="topics" onClick={() => edit && setEdit(false)}>
       <MyModal
         item="Topic"
         visibility={edit}

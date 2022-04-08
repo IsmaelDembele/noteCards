@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getLogged } from "../../apis/myApis";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { routes } from "../../constantes/constantes";
-import { review } from "../../features/application/appSlice";
+import { review, test } from "../../features/application/appSlice";
 import "./drawer.css";
 
 const Drawer = () => {
@@ -26,7 +26,15 @@ const Drawer = () => {
       >
         Review
       </button>
-      <button className="btn menu">Test</button>
+      <button
+        className="btn menu"
+        onClick={() => {
+          dispatch(test());
+          navigate(routes.test, { replace: true });
+        }}
+      >
+        Test
+      </button>
       <button className="btn menu">Grade</button>
     </section>
   );
