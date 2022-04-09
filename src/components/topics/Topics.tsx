@@ -52,7 +52,8 @@ const Topics = () => {
   if (isError) return <div>Error...</div>;
 
   return (
-    <section className="topics" onClick={() => edit && setEdit(false)}>
+    // onClick={() => edit && setEdit(false)}
+    <section className="topics" >
       <MyModal
         item="Topic"
         visibility={edit}

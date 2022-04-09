@@ -38,6 +38,7 @@ const pathRoutes = {
   RENAME_TOPIC: "/renameTopic",
   RENAME_SUB_TOPIC: "/renameSubTopic",
   GET_ALL_CARDS: "/getAllCards",
+  GEL_ALL_CARDS_OF_TOPIC: "/getAllCardsOfTopic",
 };
 
 export const getCard = async (topic: string, subTopic: string, token: string) => {
@@ -192,4 +193,12 @@ export const renameSubTopic = async (
 
 export const getAllCards = async (token: string) => {
   return await axios.post(`http://localhost:5000${pathRoutes.GET_ALL_CARDS}`, { token });
+};
+
+export const getAllCardsOfTopic = async (token: string, topic: string) => {
+  if (topic.length === 0) return null;
+
+  return await axios.get(
+    `http://localhost:5000${pathRoutes.GEL_ALL_CARDS_OF_TOPIC}/?token=${token}&topic=${topic}`
+  );
 };

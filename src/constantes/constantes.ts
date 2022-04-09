@@ -16,8 +16,8 @@ export const routes = {
 
 export const testMenu = {
   everything: "everything",
-  topics: "topics",
-  subtopics: "subtopics",
+  topic: "Topic",
+  subtopic: "Subtopics",
 };
 
 export let currentSubTopic: string = "";

@@ -1,10 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../app/hooks";
 import { routes, testMenu } from "../../constantes/constantes";
+import { setTestTopic } from "../../features/application/appSlice";
 import "./test.css";
 
 const Test = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  dispatch(setTestTopic(""));
 
   return (
     <section className="test">
@@ -18,13 +23,13 @@ const Test = () => {
         </div>
         <div
           className="test-topics center"
-          onClick={() => navigate(routes.testOptions + ":" + testMenu.topics)}
+          onClick={() => navigate(routes.testOptions + ":" + testMenu.topic)}
         >
           by topic
         </div>
         <div
           className="test-subTopics center"
-          onClick={() => navigate(routes.testOptions + ":" + testMenu.subtopics)}
+          onClick={() => navigate(routes.testOptions + ":" + testMenu.subtopic)}
         >
           by subtopics
         </div>

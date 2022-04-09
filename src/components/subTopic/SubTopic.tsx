@@ -66,7 +66,7 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
   );
 
   return (
-    <section className="sub-topic" onClick={() => edit && setEdit(false)}>
+    <section className="sub-topic">
       <MyModal
         item="SubTopic"
         visibility={edit}

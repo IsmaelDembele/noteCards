@@ -75,7 +75,7 @@ const App = () => {
           path="/testOptions:id"
           element={
             <ProtectedRoutes isLogged={isLogged}>
-              <TestOption />
+              <TestOption topic={appState.testTopic} />
             </ProtectedRoutes>
           }
         />
