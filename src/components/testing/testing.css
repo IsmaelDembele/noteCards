@@ -19,10 +19,14 @@
   font-weight: 100;
   letter-spacing: 2px;
 }
-/* .testing-question {
+
+.testing-question {
+  width: 80%;
   grid-row: 3 / 6;
-  grid-column: 4 / 8;
-} */
+  grid-column: 3 / 8;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .testing-wrong {
   cursor: pointer;
@@ -58,14 +62,43 @@
 
 .testing-answer-box {
   resize: none;
-  width: 100%;
+  width: 80%;
   height: 100%;
   grid-row: 7 / 9;
-  grid-column: 4 / 8;
+  grid-column: 3 / 8;
   padding: 1rem;
   background-color: white;
   border-radius: 3px;
   outline: none;
   box-shadow: 0 0 0.2rem rgba(0, 0, 0, 3);
   border: 1px solid var(--tea-green);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.score {
+  animation: 4s ease game_finish;
+}
+
+@keyframes game_finish {
+  0%,
+  25%,
+  50%,
+  75% {
+    color: red;
+    letter-spacing: 4px;
+    /* font-weight: 400; */
+  }
+  15%,
+  40%,
+  65%,
+  80% {
+    color: black;
+    letter-spacing: inherit;
+    /* font-weight: inherit; */
+  }
+  100% {
+    color: inherit;
+    /* font-weight: inherit; */
+  }
 }

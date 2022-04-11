@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../app/hooks";
 import { routes, testMenu } from "../../constantes/constantes";
@@ -9,7 +9,9 @@ const Test = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  dispatch(setTestTopic(""));
+  useEffect(() => {
+    dispatch(setTestTopic(""));
+  }, [dispatch]);
 
   return (
     <section className="test">
