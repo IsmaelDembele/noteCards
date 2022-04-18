@@ -7,7 +7,9 @@ import { signOut } from "../../features/authentication/authSlice";
 import { useState } from "react";
 
 import MyForm from "./MyForm";
-import { routes } from "../../constantes/constantes";
+import { errorMsg, routes } from "../../utils/constantes/constantes";
+import { notify } from "../../utils/functions/function";
+import LoadingBar from "../loadingBar/LoadingBar";
 
 const Nav = () => {
   const queryClient = useQueryClient();
@@ -22,6 +24,9 @@ const Nav = () => {
       onSuccess: data => {
         queryClient.invalidateQueries("getTopics");
       },
+      onError: error => {
+        error && notify(errorMsg);
+      },
     }
   );
 
@@ -31,6 +36,9 @@ const Nav = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("getSubtopic");
+      },
+      onError: error => {
+        error && notify(errorMsg);
       },
     }
   );
@@ -57,15 +65,13 @@ const Nav = () => {
 
   return (
     <>
-      {mutation.isLoading && <LinearProgress />}
+      {(mutation.isLoading || subTopicMutation.isLoading) && <LoadingBar />}
       <nav className="nav">
         <MyForm handleSubmit={handleSubmit} inputValue={inputValue} setInputValue={setInputValue} />
         <button
           className="btn nav-btn"
           onClick={() => {
-            console.log("signing out");
             dispatch(signOut());
-            // dispatch(setRoute(routes.topics));
           }}
         >
           sign out

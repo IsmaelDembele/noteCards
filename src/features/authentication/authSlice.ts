@@ -5,7 +5,7 @@ import {
   localStorageTopicKey,
   routes,
   localStorageSubTopicKey,
-} from "../../constantes/constantes";
+} from "../../utils/constantes/constantes";
 
 export interface IAuthState {
   isLogged?: boolean;

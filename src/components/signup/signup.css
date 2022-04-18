@@ -60,7 +60,7 @@ hr {
 }
 
 .error {
-  color: var(--color-error);
-  font-size: 1.1rem;
-  height: 1.1rem;
+  color: var(--color-error) !important;
+  font-size: 1.1rem !important;
+  height: 1.1rem !important;
 }

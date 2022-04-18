@@ -8,9 +8,10 @@ import ArrowCircleRightTwoToneIcon from "@mui/icons-material/ArrowCircleRightTwo
 import ArrowCircleUpTwoToneIcon from "@mui/icons-material/ArrowCircleUpTwoTone";
 import ChangeCircleTwoToneIcon from "@mui/icons-material/ChangeCircleTwoTone";
 import { useNavigate } from "react-router-dom";
-import { routes } from "../../constantes/constantes";
+import { errorMsg, routes } from "../../utils/constantes/constantes";
 import CreateEditCard from "../createEditCard/CreateEditCard";
 import { nextCard, previousCard, viewCards } from "../../features/application/appSlice";
+import { notify } from "../../utils/functions/function";
 
 const Card: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -31,6 +32,9 @@ const Card: React.FC = () => {
       onSuccess: () => {
         navigate(routes.cards);
         dispatch(viewCards(appState));
+      },
+      onError: error => {
+        error && notify(errorMsg);
       },
     }
   );

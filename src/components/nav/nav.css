@@ -1,13 +1,15 @@
 .nav {
+  /* position: relative; */
   background-color: var(--russian-green);
   height: 100%;
   width: 100%;
 
   grid-column: 2 / end;
-
+  grid-row: 1 / 2;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  z-index: 1;
 }
 
 .nav-form {
@@ -48,7 +50,7 @@
 }
 
 .card-nav-btn {
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   font-weight: 400;
   text-transform: capitalize;
   padding-left: 2em;

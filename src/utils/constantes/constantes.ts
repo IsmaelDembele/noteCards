@@ -12,6 +12,7 @@ export const routes = {
   signup: "/signup",
   test: "/test",
   testOptions: "/testOPtions",
+  account: "/account",
 };
 
 export const testMenu = {
@@ -21,3 +22,5 @@ export const testMenu = {
 };
 
 export let currentSubTopic: string = "";
+
+export const errorMsg = "An error occured";

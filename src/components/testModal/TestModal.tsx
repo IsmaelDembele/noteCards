@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { getSubTopic, getTopics } from "../../apis/myApis";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { routes, testMenu } from "../../constantes/constantes";
+import { routes, testMenu } from "../../utils/constantes/constantes";
 import { setTestSubTopic, setTestTopic } from "../../features/application/appSlice";
 import "./testModal.css";
 

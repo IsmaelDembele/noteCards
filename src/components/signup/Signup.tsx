@@ -1,10 +1,22 @@
 import "./signup.css";
 import { Link, useNavigate } from "react-router-dom";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import {
+  Formik,
+  Field,
+  Form,
+  ErrorMessage,
+  useField,
+  FieldHookConfig,
+  FormikProps,
+  FieldAttributes,
+  FieldInputProps,
+} from "formik";
 import * as Yup from "yup";
 import { useMutation } from "react-query";
 import { postCreateAccount } from "../../apis/myApis";
-import { routes } from "../../constantes/constantes";
+import { routes } from "../../utils/constantes/constantes";
+import { notify } from "../../utils/functions/function";
+import { ReactNode } from "react";
 
 export interface ISignup {
   firstname: string;
@@ -25,10 +37,13 @@ const Signup = () => {
   const navigate = useNavigate();
   const mutation = useMutation((values: ISignup) => postCreateAccount(values), {
     onSuccess: data => {
-      console.log(data?.data, "sign up success");
       data?.data === "ok" && navigate("/");
+      notify("Account created", "info");
     },
   });
+  if (mutation.isError) {
+    notify("Something went wrong. Please try again later");
+  }
   return (
     <Formik
       initialValues={initialValues}
@@ -51,45 +66,26 @@ const Signup = () => {
       <div className="signup">
         <Form className="form">
           <div className="title">Sign up</div>
-          <label className="label" htmlFor="firstname">
-            Firstname
-          </label>
-          <Field type="text" id="firstname" name="firstname" className="input" autoComplete="off" />
-          <span className="error">
-            <ErrorMessage name="firstname" />
-          </span>
 
-          <label className="label" htmlFor="lastname">
-            Lastname
-          </label>
-          <Field type="text" id="lastname" name="lastname" className="input" autoComplete="off" />
-          <span className="error">
-            <ErrorMessage name="lastname" />
-          </span>
+          <Label name="Firstname" />
+          <Field type="text" id="firstname" name="firstname" className="input" />
+          <ErrorMsg name="firstname" />
 
-          <label className="label" htmlFor="email">
-            Email
-          </label>
+          <Label name="Lastname" />
+          <Field type="text" id="lastname" name="lastname" className="input" />
+          <ErrorMsg name="lastname" />
+
+          <Label name="Email" />
           <Field type="text" id="email" name="email" className="input" />
-          <span className="error">
-            <ErrorMessage name="email" />
-          </span>
+          <ErrorMsg name="email" />
 
-          <label className="label" htmlFor="password">
-            Password
-          </label>
+          <Label name="Password" />
           <Field type="password" id="password" name="password" className="input" />
-          <span className="error">
-            <ErrorMessage name="password" />
-          </span>
+          <ErrorMsg name="password" />
 
-          <label className="label" htmlFor="passwordConfirm">
-            Confirm password
-          </label>
+          <Label name="Confirm password" />
           <Field type="password" id="passwordConfirm" name="passwordConfirm" className="input" />
-          <span className="error">
-            <ErrorMessage name="passwordConfirm" />
-          </span>
+          <ErrorMsg name="passwordConfirm" />
 
           <button type="submit" className="signup-btn btn">
             Send
@@ -105,3 +101,23 @@ const Signup = () => {
 };
 
 export default Signup;
+
+type TType = {
+  name: string;
+};
+
+export const ErrorMsg: React.FC<TType> = ({ name }) => {
+  return (
+    <span className="error">
+      <ErrorMessage name={name} />
+    </span>
+  );
+};
+
+export const Label: React.FC<TType> = ({ name }) => {
+  return (
+    <label className="label" htmlFor={name.toLocaleLowerCase()}>
+      {name}
+    </label>
+  );
+};

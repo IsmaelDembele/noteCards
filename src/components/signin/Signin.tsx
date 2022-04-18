@@ -6,8 +6,18 @@ import { useMutation, useQuery } from "react-query";
 import { getLogged, postLogged } from "../../apis/myApis";
 import { getToken, IAuthState, setSignin, signOut } from "../../features/authentication/authSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { localStorageAuthTokenKey, routes } from "../../constantes/constantes";
+import { localStorageAuthTokenKey, routes } from "../../utils/constantes/constantes";
 import { setRoute } from "../../features/application/appSlice";
+import { ToastContainer, Zoom } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import LoadingBar from "../loadingBar/LoadingBar";
+import { notify } from "../../utils/functions/function";
+import { ErrorMsg, Label } from "../signup/Signup";
+
+type IError = {
+  type: string;
+  source: string;
+};
 
 const Signin = () => {
   let navigate = useNavigate();
@@ -16,33 +26,47 @@ const Signin = () => {
   const state = useAppSelector(state => state.auth);
   const route = useAppSelector(state => state.app.route);
 
-  const { isError } = useQuery(["islogged", state.token], () => getLogged(state.token as string), {
-    onSuccess: data => {
-      if (!localStorage.getItem(localStorageAuthTokenKey) && (state.token as string).length > 0) {
-        //save the token
-        const authToken = {
-          token: state.token,
-        };
-        localStorage.setItem(localStorageAuthTokenKey, JSON.stringify(authToken, null, 2));
-      }
-      if (data?.data) {
-        dispatch(setSignin(true));
-        navigate(route);
-      } else {
-        dispatch(setRoute(routes.topics));
-        dispatch(signOut());
-      }
-    },
-    cacheTime: 1,
-  });
+  const { isError, error, isLoading } = useQuery(
+    ["islogged", state.token],
+    () => getLogged(state.token as string),
+    {
+      onSuccess: data => {
+        if (!localStorage.getItem(localStorageAuthTokenKey) && (state.token as string).length > 0) {
+          //save the token
+          const authToken = {
+            token: state.token,
+          };
+          localStorage.setItem(localStorageAuthTokenKey, JSON.stringify(authToken, null, 2));
+        }
 
-  if (isError) alert(" error ");
+        if (data?.data.email && data?.data.firstname) {
+          dispatch(setSignin(true));
+          navigate(route);
+        } else {
+          dispatch(setRoute(routes.topics));
+          dispatch(signOut());
+        }
+      },
+      onError: (error: Error) => {
+        error && notify(error.message);
+      },
+      cacheTime: 1,
+    }
+  );
 
   const mutation = useMutation((values: IAuthState) => postLogged(values), {
     onSuccess: async data => {
       if (data?.data?.msg === "ok") {
         const { token, msg, email, firstname, lastname } = data?.data;
         dispatch(getToken({ token, msg, email, firstname, lastname }));
+      }
+    },
+    onError: (error: Error) => {
+      console.log(error);
+      if (error.message.includes("403")) {
+        notify("Wrong password and/or email!");
+      } else {
+        notify("Server error. Please try again later");
       }
     },
   });
@@ -59,23 +83,17 @@ const Signin = () => {
       }}
     >
       <div className="signin">
+        {(isLoading || mutation.isLoading) && <LoadingBar />}
         <Form className="form">
           <div className="title">Sign in</div>
-          <label className="label" htmlFor="email">
-            Email
-          </label>
-          <Field type="text" id="email" name="email" className="input" autoComplete="on" />
-          <span className="error">
-            <ErrorMessage name="email" />
-          </span>
 
-          <label className="label" htmlFor="password">
-            Password
-          </label>
+          <Label name="Email" />
+          <Field type="text" id="email" name="email" className="input" autoComplete="on" />
+          <ErrorMsg name="email" />
+
+          <Label name="Password" />
           <Field type="password" id="password" name="password" className="input" />
-          <span className="error">
-            <ErrorMessage name="password" />
-          </span>
+          <ErrorMsg name="password" />
 
           <button type="submit" className="signin-btn btn">
             Send

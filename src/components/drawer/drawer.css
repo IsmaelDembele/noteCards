@@ -9,6 +9,7 @@
 }
 
 .welcome {
+  min-height: 5rem;
   padding-bottom: 0.3rem;
   border-bottom: 3px solid var(--nyanza);
 }

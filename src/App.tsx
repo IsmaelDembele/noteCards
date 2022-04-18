@@ -9,10 +9,12 @@ import Nav from "./components/nav/Nav";
 import "./app.css";
 import Drawer from "./components/drawer/Drawer";
 import Cards from "./components/cards/Cards";
-import { routes } from "./constantes/constantes";
+import { routes } from "./utils/constantes/constantes";
 import Card from "./components/card/Card";
 import Test from "./components/test/Test";
 import TestOption from "./components/testOptions/TestOptions";
+import { ToastContainer, Zoom } from "react-toastify";
+import Account from "./components/account/Account";
 
 const App = () => {
   const isLogged = useAppSelector(state => state.auth.isLogged);
@@ -23,7 +25,18 @@ const App = () => {
     <div className="app">
       {location.pathname === routes.signin || location.pathname === routes.signup ? "" : <Nav />}
       {location.pathname === routes.signin || location.pathname === routes.signup ? "" : <Drawer />}
-
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Zoom}
+      />
       <Routes>
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
@@ -76,6 +89,14 @@ const App = () => {
           element={
             <ProtectedRoutes isLogged={isLogged}>
               <TestOption topic={appState.testTopic} subTopic={appState.testSubtopic} />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            <ProtectedRoutes isLogged={isLogged}>
+              <Account />
             </ProtectedRoutes>
           }
         />

@@ -7,8 +7,6 @@
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(9, 1fr);
-  /* align-items: center; */
-  /* justify-items: center; */
 }
 
 .testing-question-number {

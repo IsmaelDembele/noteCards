@@ -5,7 +5,7 @@ import {
   localStorageSubTopicKey,
   localStorageTopicKey,
   routes,
-} from "../../constantes/constantes";
+} from "../../utils/constantes/constantes";
 
 export interface IAppState {
   route: string;
@@ -69,6 +69,14 @@ export const appSlice = createSlice({
     setNewCard: (state, action) => {
       state.newCard = action.payload;
     },
+    account: state => {
+      localStorage.setItem(localStorageRouteKey, routes.account);
+      localStorage.removeItem(localStorageTopicKey);
+      localStorage.removeItem(localStorageSubTopicKey);
+      localStorage.removeItem(localStorageCardIdKey);
+
+      state.route = routes.account;
+    },
     test: state => {
       localStorage.setItem(localStorageRouteKey, routes.test);
       localStorage.removeItem(localStorageTopicKey);
@@ -105,6 +113,7 @@ export const {
   previousCard,
   setNewCard,
   test,
+  account,
   setTestTopic,
   setTestSubTopic,
 } = appSlice.actions;

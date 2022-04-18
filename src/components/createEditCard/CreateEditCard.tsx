@@ -3,7 +3,10 @@ import { useMutation, useQueryClient } from "react-query";
 import { addCards, IReadCard, updateCard } from "../../apis/myApis";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setNewCard } from "../../features/application/appSlice";
+import { errorMsg } from "../../utils/constantes/constantes";
+import { notify } from "../../utils/functions/function";
 import { TCard } from "../cards/Cards";
+import LoadingBar from "../loadingBar/LoadingBar";
 import "./CreateEditCard.css";
 
 const initialvalue: TCard = { front: "", back: "", note: "" };
@@ -40,10 +43,11 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
       addCards({ topic, subTopic, front, back, note, token }),
     {
       onSuccess: () => {
-        // queryClient.invalidateQueries(["getCard", appState.topic, appState.subTopic, token]);
         queryClient.invalidateQueries(["getCards", appState.topic, appState.subTopic, token]);
-        // setCard(initialvalue);
         setNewCard && setNewCard(false);
+      },
+      onError: error => {
+        error && notify(errorMsg);
       },
     }
   );
@@ -65,6 +69,9 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
 
         setCard(initialvalue);
         setEdit && setEdit(false);
+      },
+      onError: error => {
+        error && notify(errorMsg);
       },
     }
   );
@@ -100,9 +107,6 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
       });
       dispatch(setNewCard(false));
     } else {
-      // setEdit(false);
-      console.log("edit");
-
       updateCardMutation.mutate({
         topic: topic,
         subTopic: subTopic,
@@ -117,6 +121,7 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
 
   return (
     <form action="" className="newCard">
+      {(mutation.isLoading || updateCardMutation.isLoading) && <LoadingBar />}
       <div className="cards-text">
         <textarea
           name="front"

@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getAllCards, getAllCardsOfTopic, getCard } from "../../apis/myApis";
 import { useAppSelector } from "../../app/hooks";
-import { testMenu } from "../../constantes/constantes";
+import { testMenu } from "../../utils/constantes/constantes";
 import Testing from "../testing/Testing";
 import TestModal from "../testModal/TestModal";
 import "./testOptions.css";

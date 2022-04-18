@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../app/hooks";
-import { routes, testMenu } from "../../constantes/constantes";
+import { routes, testMenu } from "../../utils/constantes/constantes";
 import { setTestTopic } from "../../features/application/appSlice";
 import "./test.css";
 

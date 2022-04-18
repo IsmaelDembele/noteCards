@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AddCircle } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
-import { routes } from "../../constantes/constantes";
+import { routes } from "../../utils/constantes/constantes";
 import "./nav.css";
 import { useAppDispatch } from "../../app/hooks";
 import { setNewCard } from "../../features/application/appSlice";

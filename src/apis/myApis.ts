@@ -35,6 +35,7 @@ const pathRoutes = {
   DELETE_SUB_TOPIC: "/deleteSubTopic",
   DELETE_CARD: "/deleteCard",
   DELETE_CARDS: "/deleteCards",
+  DELETE_ACCOUNT: "/deleteAccount",
   RENAME_TOPIC: "/renameTopic",
   RENAME_SUB_TOPIC: "/renameSubTopic",
   GET_ALL_CARDS: "/getAllCards",
@@ -108,6 +109,7 @@ export const getLogged = async (token: string) => {
 };
 
 export const postLogged = async (logginInfo: IAuthState) => {
+  // if(!logginInfo.isLogged || logginInfo.token)
   return await axios.post(`http://localhost:5000${pathRoutes.SIGN_IN}`, { logginInfo });
 };
 
@@ -201,4 +203,9 @@ export const getAllCardsOfTopic = async (token: string, topic: string) => {
   return await axios.get(
     `http://localhost:5000${pathRoutes.GEL_ALL_CARDS_OF_TOPIC}/?token=${token}&topic=${topic}`
   );
+};
+
+export const deleteAccount = async (token: string, password: string) => {
+  if (!password || !token) return null;
+  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_ACCOUNT}`, { token, password });
 };

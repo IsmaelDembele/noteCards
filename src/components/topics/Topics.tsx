@@ -4,10 +4,11 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewSubtopics } from "../../features/application/appSlice";
 import "./topics.css";
 import { useNavigate } from "react-router-dom";
-import { routes } from "../../constantes/constantes";
+import { errorMsg, routes } from "../../utils/constantes/constantes";
 import MyModal from "../myModal/MyModal";
-import { useState } from "react";
-import { string } from "yup";
+import { useEffect, useState } from "react";
+import LoadingBar from "../loadingBar/LoadingBar";
+import { notify } from "../../utils/functions/function";
 
 export interface ITopics {
   _id?: string;
@@ -20,11 +21,22 @@ const Topics = () => {
   const [edit, setEdit] = useState<boolean>(false);
   const token = useAppSelector(state => state.auth.token) as string;
   const queryClient = useQueryClient();
-  const { data, isError, isSuccess } = useQuery(["getTopics", token], () => getTopics(token));
+  const { data, isError, isSuccess, isLoading } = useQuery(
+    ["getTopics", token],
+    () => getTopics(token),
+    {
+      onError: (error:Error) => {   
+        error && notify(error.message);
+      },
+    }
+  );
 
   const deleteTopicsMutation = useMutation((token: string) => deleteTopics(token), {
     onSuccess: () => {
       queryClient.invalidateQueries(["getTopics", token]);
+    },
+    onError: (error:Error) => {   
+      error && notify(error.message);
     },
   });
 
@@ -34,6 +46,9 @@ const Topics = () => {
       onSuccess: () => {
         setEdit(false);
         queryClient.invalidateQueries(["getTopics", token]);
+      },
+      onError: (error:Error) => {   
+        error && notify(error.message);
       },
     }
   );
@@ -46,14 +61,14 @@ const Topics = () => {
         setEdit(false);
         queryClient.invalidateQueries(["getTopics", token]);
       },
+      onError: (error:Error) => {   
+        error && notify(error.message);
+      },
     }
   );
 
-  if (isError) return <div>Error...</div>;
-
   return (
-    // onClick={() => edit && setEdit(false)}
-    <section className="topics" >
+    <section className="topics">
       <MyModal
         item="Topic"
         visibility={edit}
@@ -62,7 +77,9 @@ const Topics = () => {
         deleteItem={deleteTopicMutation}
         renameItem={renameTopicMutation}
       />
-
+      {(isLoading || deleteTopicsMutation.isLoading || deleteTopicMutation.isLoading) && (
+        <LoadingBar />
+      )}
       <div className="topics-title">
         <p>Topics</p>
 
@@ -83,7 +100,6 @@ const Topics = () => {
         </button>
       </div>
 
-      {isError && <div>An error occured</div>}
       <div className="list-items">
         {isSuccess &&
           typeof data?.data === "object" &&

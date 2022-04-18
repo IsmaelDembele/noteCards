@@ -1,12 +1,14 @@
 import "./subTopic.css";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteSubTopic, deleteSubTopics, getSubTopic, renameSubTopic } from "../../apis/myApis";
-import { routes } from "../../constantes/constantes";
+import { errorMsg, routes } from "../../utils/constantes/constantes";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewCards } from "../../features/application/appSlice";
 import { useNavigate } from "react-router-dom";
 import MyModal from "../myModal/MyModal";
 import { useState } from "react";
+import { notify } from "../../utils/functions/function";
+import LoadingBar from "../loadingBar/LoadingBar";
 
 interface IProps {
   topic: string;
@@ -31,8 +33,14 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
   let navigate = useNavigate();
   const token = useAppSelector(state => state.auth.token) as string;
   const dispatch = useAppDispatch();
-  const { data, isSuccess } = useQuery(["getSubtopic", topic, token], () =>
-    getSubTopic(topic, token)
+  const { data, isSuccess, isLoading } = useQuery(
+    ["getSubtopic", topic, token],
+    () => getSubTopic(topic, token),
+    {
+      onError: (error:Error) => {   
+        error && notify(error.message);
+      },
+    }
   );
 
   const mutation = useMutation(
@@ -40,6 +48,9 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["getSubtopic", topic, token]);
+      },
+      onError: (error:Error) => {   
+        error && notify(error.message);
       },
     }
   );
@@ -50,6 +61,9 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
       onSuccess: () => {
         queryClient.invalidateQueries(["getSubtopic", topic, token]);
         setEdit(false);
+      },
+      onError: (error:Error) => {   
+        error && notify(error.message);
       },
     }
   );
@@ -62,6 +76,7 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
         queryClient.invalidateQueries(["getSubtopic", topic, token]);
         setEdit(false);
       },
+
     }
   );
 
@@ -75,7 +90,10 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
         deleteItem={deleteSubTopicMutation}
         renameItem={renameSubTopicMutation}
       />
-
+      {(isLoading ||
+        renameSubTopicMutation.isLoading ||
+        deleteSubTopicMutation.isLoading ||
+        mutation.isLoading) && <LoadingBar />}
       <div className="sub-topic-title">
         <p>{topic}</p>
         <button className="btn" onClick={() => setEdit(!edit)}>

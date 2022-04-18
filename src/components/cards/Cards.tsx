@@ -2,11 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { deleteCards, getCards, ICards, IReadCard } from "../../apis/myApis";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { routes } from "../../constantes/constantes";
+import { routes } from "../../utils/constantes/constantes";
 import { viewCard, setNewCard } from "../../features/application/appSlice";
 import CreateEditCard from "../createEditCard/CreateEditCard";
 import ArrowRightRoundedIcon from "@mui/icons-material/ArrowRightRounded";
 import "./cards.css";
+import { notify } from "../../utils/functions/function";
+import LoadingBar from "../loadingBar/LoadingBar";
 
 export type TCard = {
   front: string;
@@ -22,8 +24,14 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
-  const { data, error } = useQuery(["getCards", appState.topic, appState.subTopic, token], () =>
-    getCards(appState.topic, appState.subTopic, token)
+  const { data, isLoading } = useQuery(
+    ["getCards", appState.topic, appState.subTopic, token],
+    () => getCards(appState.topic, appState.subTopic, token),
+    {
+      onError: (error: Error) => {
+        error && notify(error.message);
+      },
+    }
   );
 
   const deleteCardsMutation = useMutation(
@@ -32,16 +40,18 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
       onSuccess: () => {
         queryClient.invalidateQueries(["getCards", appState.topic, appState.subTopic, token]);
       },
+      onError: (error: Error) => {
+        error && notify(error.message);
+      },
     }
   );
 
-  if (error) console.log("query error", error);
-
   return (
     <section className="cards">
+      {(isLoading || deleteCardsMutation.isLoading) && <LoadingBar />}
       <div className="cards-title">
         <p>
-          {topic} <ArrowRightRoundedIcon sx={{ fontSize: "40px", color: '#fff' }} /> {subTopic}
+          {topic} <ArrowRightRoundedIcon sx={{ fontSize: "40px", color: "#fff" }} /> {subTopic}
         </p>
         <button
           className="btn"

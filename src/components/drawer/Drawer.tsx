@@ -2,8 +2,8 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { getLogged } from "../../apis/myApis";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { routes } from "../../constantes/constantes";
-import { review, test } from "../../features/application/appSlice";
+import { routes } from "../../utils/constantes/constantes";
+import { account, review, test } from "../../features/application/appSlice";
 import "./drawer.css";
 
 const Drawer = () => {
@@ -35,7 +35,16 @@ const Drawer = () => {
       >
         Test
       </button>
-      <button className="btn menu">Grade</button>
+
+      <button
+        className="btn menu"
+        onClick={() => {
+          dispatch(account());
+          navigate(routes.account, { replace: true });
+        }}
+      >
+        Account
+      </button>
     </section>
   );
 };
