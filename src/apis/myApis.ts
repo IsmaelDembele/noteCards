@@ -40,6 +40,7 @@ const pathRoutes = {
   RENAME_SUB_TOPIC: "/renameSubTopic",
   GET_ALL_CARDS: "/getAllCards",
   GEL_ALL_CARDS_OF_TOPIC: "/getAllCardsOfTopic",
+  CHANGE_PASSWORD: "/changePassword",
 };
 
 export const getCard = async (topic: string, subTopic: string, token: string) => {
@@ -109,7 +110,6 @@ export const getLogged = async (token: string) => {
 };
 
 export const postLogged = async (logginInfo: IAuthState) => {
-  // if(!logginInfo.isLogged || logginInfo.token)
   return await axios.post(`http://localhost:5000${pathRoutes.SIGN_IN}`, { logginInfo });
 };
 
@@ -208,4 +208,13 @@ export const getAllCardsOfTopic = async (token: string, topic: string) => {
 export const deleteAccount = async (token: string, password: string) => {
   if (!password || !token) return null;
   return await axios.post(`http://localhost:5000${pathRoutes.DELETE_ACCOUNT}`, { token, password });
+};
+
+export const changePassword = async (token: string, password: string, newPassword: string) => {
+  if (!password || !token) return null;
+  return await axios.post(`http://localhost:5000${pathRoutes.CHANGE_PASSWORD}`, {
+    token,
+    password,
+    newPassword,
+  });
 };

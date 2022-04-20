@@ -1,6 +1,6 @@
 import "./signin.css";
 import { Link, useNavigate } from "react-router-dom";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQuery } from "react-query";
 import { getLogged, postLogged } from "../../apis/myApis";
@@ -8,16 +8,10 @@ import { getToken, IAuthState, setSignin, signOut } from "../../features/authent
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { localStorageAuthTokenKey, routes } from "../../utils/constantes/constantes";
 import { setRoute } from "../../features/application/appSlice";
-import { ToastContainer, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingBar from "../loadingBar/LoadingBar";
 import { notify } from "../../utils/functions/function";
 import { ErrorMsg, Label } from "../signup/Signup";
-
-type IError = {
-  type: string;
-  source: string;
-};
 
 const Signin = () => {
   let navigate = useNavigate();
@@ -26,7 +20,7 @@ const Signin = () => {
   const state = useAppSelector(state => state.auth);
   const route = useAppSelector(state => state.app.route);
 
-  const { isError, error, isLoading } = useQuery(
+  const { isLoading } = useQuery(
     ["islogged", state.token],
     () => getLogged(state.token as string),
     {

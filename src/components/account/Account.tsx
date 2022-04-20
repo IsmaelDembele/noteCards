@@ -1,11 +1,14 @@
+import { Field, Form, Formik } from "formik";
+import * as Yup from "yup";
 import React, { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { deleteAccount, getLogged } from "../../apis/myApis";
+import { useMutation, useQuery } from "react-query";
+import { changePassword, deleteAccount, getLogged } from "../../apis/myApis";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { signOut } from "../../features/authentication/authSlice";
 import { notify } from "../../utils/functions/function";
 import LoadingBar from "../loadingBar/LoadingBar";
 import "./account.css";
+import { ErrorMsg } from "../signup/Signup";
 
 const Account: React.FC = () => {
   const [changePassword, setChangePassword] = useState(false);
@@ -72,30 +75,83 @@ interface IPasswordModal {
   setChangePassword: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PasswordModal: React.FC<IPasswordModal> = ({ setChangePassword }) => {
-  return (
-    <div className="password-modal center">
-      <div className="current-password">
-        <label htmlFor="current-password">Password</label>
-        <input type="text" id="current-password" />
-      </div>
-      {/* <hr /> */}
-      <div className="new-password">
-        <label htmlFor="current-password">New Password</label>
-        <input type="text" />
-      </div>
-      <div className="confirm-password">
-        <label htmlFor="confirm-password">Confirm Password</label>
-        <input type="text" id="confirm-password" />
-      </div>
+type TPasswordChange = {
+  token: string;
+  password: string;
+  newPassword: string;
+};
 
-      <div className="password-modal-btn">
-        <button className="password-modal-btn-submit btn">Submit</button>
-        <button className="password-modal-btn-cancel btn" onClick={() => setChangePassword(false)}>
-          Cancel
-        </button>
-      </div>
-    </div>
+const initialValues = {
+  password: "",
+  newPassword: "",
+  newPasswordConfirm: "",
+};
+const PasswordModal = ({ setChangePassword }: IPasswordModal) => {
+  const token = useAppSelector(state => state.auth.token) as string;
+
+  const mutation = useMutation(
+    ({ token, password, newPassword }: TPasswordChange) =>
+      changePassword(token, password, newPassword),
+    {
+      onSuccess: data => {
+        if (data?.data === "wrong password") notify("Wrong Password");
+        else notify("Password Changed", "info");
+      },
+      onError: (error: Error) => {
+        notify(error.message);
+      },
+    }
+  );
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={Yup.object({
+        password: Yup.string().min(5, "Must be at least 5 characters").required("Required"),
+        newPassword: Yup.string().min(5, "Must be at least 5 characters").required("Required"),
+        newPasswordConfirm: Yup.string()
+          .min(5, "Must be at least five characteres")
+          .oneOf([Yup.ref("newPassword")], "Passwords must be the same")
+          .required("Required"),
+      })}
+      onSubmit={(values, { resetForm }) => {
+        mutation.mutate({ token, password: values.password, newPassword: values.newPassword });
+        resetForm();
+        setChangePassword(false);
+      }}
+    >
+      <Form className="password-modal center">
+        {mutation.isLoading && <LoadingBar />}
+        <div className="current-password">
+          <label htmlFor="password">Password</label>
+          <Field type="password" id="password" name="password" />
+          <ErrorMsg name="password" />
+        </div>
+        {/* <hr /> */}
+        <div className="new-password">
+          <label htmlFor="newPassword">New Password</label>
+          <Field type="password" id="newPassword" name="newPassword" />
+          <ErrorMsg name="newPassword" />
+        </div>
+        <div className="confirm-password">
+          <label htmlFor="newPasswordConfirm">Confirm Password</label>
+          <Field type="password" id="newPasswordConfirm" name="newPasswordConfirm" />
+          <ErrorMsg name="newPasswordConfirm" />
+        </div>
+
+        <div className="password-modal-btn">
+          <button type="submit" className="password-modal-btn-submit btn">
+            Submit
+          </button>
+          <button
+            className="password-modal-btn-cancel btn"
+            onClick={() => setChangePassword(false)}
+          >
+            Cancel
+          </button>
+        </div>
+      </Form>
+    </Formik>
   );
 };
 

@@ -35,7 +35,7 @@ const Topics = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["getTopics", token]);
     },
-    onError: (error:Error) => {   
+    onError: (error: Error) => {   
       error && notify(error.message);
     },
   });
