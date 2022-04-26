@@ -1,5 +1,4 @@
 .topics {
-  /* position: relative; */
 }
 
 .topics-title {
@@ -17,3 +16,26 @@
   border: 1px solid #fff;
 }
 
+/* --------------MOBILE LAYOUT --------------------------*/
+
+@media only screen and (max-width: 600px) {
+  .topics-title {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .topics-title p {
+    grid-row: 1 / 2;
+    grid-column: 1 / 3;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .topics .btn {
+    width: 13rem;
+    font-size: 1.1rem;
+    align-self: center;
+    justify-self: center;
+  }
+}

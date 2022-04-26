@@ -100,3 +100,43 @@
     /* font-weight: inherit; */
   }
 }
+
+/* --------------TABLET LAYOUT --------------------------*/
+
+@media only screen and (max-width: 850px) {
+  .testing {
+    padding: 2rem;
+  }
+  .testing-wrong,
+  .testing-right,
+  .testing-check-answer {
+    grid-row: 2 / 3;
+  }
+  .testing-check-answer {
+    font-size: 2rem;
+    margin: 0;
+    font-weight: 400;
+    justify-self: center;
+    align-self: center;
+    width: 10rem;
+    height: 5rem;
+    grid-column: 4 / 8;
+  }
+
+  .display_text {
+    margin-top: 1rem;
+    grid-column: 1 / 11;
+    grid-row: 3 / 6;
+  }
+
+  .testing-answer-box {
+    grid-column: 1 / 11;
+  }
+
+  .testing-question-number {
+    font-size: 1.5rem;
+    letter-spacing: normal;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+}

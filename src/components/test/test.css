@@ -2,11 +2,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-
   align-items: center;
-
   padding: 3rem;
-  /* grid-column: 2 / 4; */
   grid-row: 2 / 4;
 
   font-weight: 100;
@@ -43,4 +40,37 @@
 
   background-color: var(--nyanza);
   cursor: pointer;
+}
+
+/* --------------LAPTOP LAYOUT--------------------------*/
+
+@media only screen and (max-width: 1300px) {
+  .test-menu {
+    flex-direction: column;
+  }
+  .test-everything,
+  .test-topics,
+  .test-subTopics {
+    width: 70%;
+    height: 15rem;
+    align-content: space-between;
+    margin: 2.5rem;
+  }
+}
+/* --------------TABLET LAYOUT --------------------------*/
+
+@media only screen and (max-width: 850px) {
+  .test-title {
+    font-size: 2rem;
+  }
+  .test-menu {
+    flex-direction: column;
+  }
+  .test-everything,
+  .test-topics,
+  .test-subTopics {
+    width: 100%;
+    align-content: space-between;
+    margin: 2.5rem;
+  }
 }

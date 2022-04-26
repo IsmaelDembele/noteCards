@@ -9,7 +9,7 @@
   --rotate-y: 0;
 
   /* CSS HEX */
-  --bg:  #F3FFEB;
+  --bg: #f3ffeb;
 
   --nyanza: #e9f5dbff;
   --tea-green: #cfe1b9ff;
@@ -125,7 +125,6 @@ a {
 .list-items .item {
   cursor: pointer;
   border-radius: 3px;
-  width: var(--drawer-width);
   width: 100%;
   background-color: var(--nyanza);
 
@@ -169,7 +168,7 @@ a {
   background-color: white;
   position: absolute;
   padding: 1rem;
-  
+
   width: 100%;
   height: 100%;
   display: flex;
@@ -178,4 +177,49 @@ a {
 }
 .text_back {
   transform: rotateY(180deg);
+}
+
+/* --------------TABLET LAYOUT --------------------------*/
+@media only screen and (max-width: 850px) {
+  html {
+    font-size: 59%;
+  }
+
+  .list-items {
+    grid-column: 1 / end;
+    border-radius: 3px;
+
+    display: grid;
+    grid-template-rows: 8rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 8rem;
+
+    gap: 3rem;
+  }
+}
+
+/* --------------MOBILE LAYOUT --------------------------*/
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 50%;
+  }
+
+  .topics,
+  .sub-topic,
+  .cards {
+    margin: 2rem 2rem 0 2rem;
+  }
+
+  .list-items {
+    grid-column: 1 / end;
+    border-radius: 3px;
+
+    display: grid;
+    grid-template-rows: 5rem;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 5rem;
+
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
 }

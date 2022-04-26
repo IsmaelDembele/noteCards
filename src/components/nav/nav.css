@@ -1,5 +1,4 @@
 .nav {
-  /* position: relative; */
   background-color: var(--russian-green);
   height: 100%;
   width: 100%;
@@ -31,7 +30,7 @@
 }
 
 .nav-input {
-  width: 16rem;
+  width: 14rem;
   border: none;
   outline: none;
   border-radius: 2px;
@@ -55,4 +54,37 @@
   text-transform: capitalize;
   padding-left: 2em;
   padding-right: 2rem;
+}
+
+/* --------------TABLET LAYOUT --------------------------*/
+
+@media only screen and (max-width: 850px) {
+  .nav-input {
+    width: 13rem;
+  }
+  .nav-btn {
+    margin-right: 7%;
+  }
+  .nav-form {
+    margin-left: 7%;
+  }
+}
+
+/* --------------PHONE LAYOUT --------------------------*/
+
+@media only screen and (max-width: 600px) {
+  .nav-input {
+    width: 13rem;
+    margin-right: .5rem;
+  }
+  .nav-btn {
+    width: 8rem;
+    font-size: 1.2rem;
+  }
+
+  .card-nav-btn {
+    font-size: 1.1rem;
+    padding-left: 1em;
+    padding-right: 1rem;
+  }
 }

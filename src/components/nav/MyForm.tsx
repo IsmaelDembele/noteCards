@@ -5,6 +5,7 @@ import { routes } from "../../utils/constantes/constantes";
 import "./nav.css";
 import { useAppDispatch } from "../../app/hooks";
 import { setNewCard } from "../../features/application/appSlice";
+import { useMediaQuery } from "@mui/material";
 
 type TMyForm = {
   handleSubmit: (
@@ -16,6 +17,7 @@ type TMyForm = {
 };
 
 const MyForm: React.FC<TMyForm> = ({ handleSubmit, inputValue, setInputValue }) => {
+  const mobileMatche = useMediaQuery("(max-width:600px)");
   const dispatch = useAppDispatch();
   const location = useLocation();
   const [path, setPath] = useState<string>(routes.topics);
@@ -37,7 +39,7 @@ const MyForm: React.FC<TMyForm> = ({ handleSubmit, inputValue, setInputValue }) 
           />
           <AddCircle
             className="nav-add-btn"
-            sx={{ fontSize: 23 }}
+            sx={mobileMatche ? { fontSize: 17 } : { fontSize: 23 }}
             onClick={e => handleSubmit(e, path)}
           />
         </form>
@@ -54,7 +56,7 @@ const MyForm: React.FC<TMyForm> = ({ handleSubmit, inputValue, setInputValue }) 
           />
           <AddCircle
             className="nav-add-btn"
-            sx={{ fontSize: 23 }}
+            sx={mobileMatche ? { fontSize: 17 } : { fontSize: 23 }}
             onClick={e => handleSubmit(e, path)}
           />
         </form>

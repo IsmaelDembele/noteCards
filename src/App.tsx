@@ -27,7 +27,7 @@ const App = () => {
       {location.pathname === routes.signin || location.pathname === routes.signup ? "" : <Drawer />}
       <ToastContainer
         position="top-center"
-        autoClose={2000}
+        autoClose={3000}
         hideProgressBar={true}
         newestOnTop={false}
         closeOnClick

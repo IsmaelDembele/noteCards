@@ -54,7 +54,6 @@ export const appSlice = createSlice({
       state.newCard = false;
     },
     viewCard: (state, action) => {
-      // localStorage.setItem(localStorageRouteKey, routes.card);
       localStorage.setItem(localStorageCardIdKey, action.payload);
 
       state.route = routes.card;

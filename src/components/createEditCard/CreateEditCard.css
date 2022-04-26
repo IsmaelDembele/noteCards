@@ -30,3 +30,21 @@
   margin-top: 3rem;
   padding: 0.1rem 6rem;
 }
+
+/* --------------PHONE LAYOUT --------------------------*/
+
+@media only screen and (max-width: 1000px) {
+  .cards-text {
+    padding: 2rem;
+    padding-top: 0;
+    margin: 0;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
+  }
+
+  .newCard .btn {
+    margin-top: -2.5rem;
+    margin-bottom: 2.5rem;
+  }
+}

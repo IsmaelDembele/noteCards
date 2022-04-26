@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { addCards, IReadCard, updateCard } from "../../apis/myApis";
@@ -35,7 +36,7 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
   const token = useAppSelector(state => state.auth.token) as string;
   const appState = useAppSelector(state => state.app);
   const dispatch = useAppDispatch();
-
+  const smLaptopMatche = useMediaQuery("(max-width:1000px)");
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
@@ -95,8 +96,6 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
     e.preventDefault();
 
     if (!setEdit) {
-      console.log("new");
-
       mutation.mutate({
         topic: topic,
         subTopic: subTopic,
@@ -127,7 +126,7 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
           name="front"
           id=""
           cols={30}
-          rows={10}
+          rows={smLaptopMatche ? 6 : 10}
           placeholder="Title or front of the note card"
           value={card.front}
           onChange={e => handleChange(e)}
@@ -136,7 +135,7 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
           name="back"
           id=""
           cols={30}
-          rows={10}
+          rows={smLaptopMatche ? 6 : 10}
           placeholder="Back or details of the note card"
           value={card.back}
           onChange={e => handleChange(e)}
@@ -145,7 +144,7 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
           name="note"
           id=""
           cols={30}
-          rows={10}
+          rows={smLaptopMatche ? 6 : 10}
           placeholder="Note about the card"
           value={card.note}
           onChange={e => handleChange(e)}

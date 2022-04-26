@@ -1,7 +1,6 @@
 import "./nav.css";
 import { useMutation, useQueryClient } from "react-query";
 import { postSubTopic, postTopic } from "../../apis/myApis";
-import LinearProgress from "@mui/material/LinearProgress";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { signOut } from "../../features/authentication/authSlice";
 import { useState } from "react";

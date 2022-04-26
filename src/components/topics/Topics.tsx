@@ -4,11 +4,13 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewSubtopics } from "../../features/application/appSlice";
 import "./topics.css";
 import { useNavigate } from "react-router-dom";
-import { errorMsg, routes } from "../../utils/constantes/constantes";
+import { routes } from "../../utils/constantes/constantes";
 import MyModal from "../myModal/MyModal";
 import { useEffect, useState } from "react";
 import LoadingBar from "../loadingBar/LoadingBar";
 import { notify } from "../../utils/functions/function";
+import { useMediaQuery } from "@mui/material";
+import ClearAll from "../clearAll/ClearAll";
 
 export interface ITopics {
   _id?: string;
@@ -16,26 +18,25 @@ export interface ITopics {
 }
 
 const Topics = () => {
+  const mobileMatche = useMediaQuery("(max-width:600px)");
   const dispatch = useAppDispatch();
   let navigate = useNavigate();
   const [edit, setEdit] = useState<boolean>(false);
+  const [showClearAll, setShowClearAll] = useState<boolean>(false);
+  const [clearAllText, setClearAllText] = useState<string>("");
   const token = useAppSelector(state => state.auth.token) as string;
   const queryClient = useQueryClient();
-  const { data, isError, isSuccess, isLoading } = useQuery(
-    ["getTopics", token],
-    () => getTopics(token),
-    {
-      onError: (error:Error) => {   
-        error && notify(error.message);
-      },
-    }
-  );
+  const { data, isSuccess, isLoading } = useQuery(["getTopics", token], () => getTopics(token), {
+    onError: (error: Error) => {
+      error && notify(error.message);
+    },
+  });
 
   const deleteTopicsMutation = useMutation((token: string) => deleteTopics(token), {
     onSuccess: () => {
       queryClient.invalidateQueries(["getTopics", token]);
     },
-    onError: (error: Error) => {   
+    onError: (error: Error) => {
       error && notify(error.message);
     },
   });
@@ -47,7 +48,7 @@ const Topics = () => {
         setEdit(false);
         queryClient.invalidateQueries(["getTopics", token]);
       },
-      onError: (error:Error) => {   
+      onError: (error: Error) => {
         error && notify(error.message);
       },
     }
@@ -61,11 +62,16 @@ const Topics = () => {
         setEdit(false);
         queryClient.invalidateQueries(["getTopics", token]);
       },
-      onError: (error:Error) => {   
+      onError: (error: Error) => {
         error && notify(error.message);
       },
     }
   );
+
+  useEffect(() => {
+    clearAllText === "DELETE" && deleteTopicsMutation.mutate(token);
+    setClearAllText("");
+  }, [clearAllText, deleteTopicsMutation, token]);
 
   return (
     <section className="topics">
@@ -80,23 +86,22 @@ const Topics = () => {
       {(isLoading || deleteTopicsMutation.isLoading || deleteTopicMutation.isLoading) && (
         <LoadingBar />
       )}
+      {showClearAll && <ClearAll name="Topics" show={setShowClearAll} setText={setClearAllText} />}
+
       <div className="topics-title">
         <p>Topics</p>
 
         <button className="btn" onClick={() => setEdit(!edit)}>
-          Edit Topics
+          {mobileMatche ? "Edit" : "Edit Topics"}
         </button>
 
         <button
           className="btn"
           onClick={() => {
-            const result = prompt(
-              "This will delete all the Topics and Subtopics: type DELETE to continue"
-            );
-            result === "DELETE" && deleteTopicsMutation.mutate(token);
+            setShowClearAll(true);
           }}
         >
-          Delete Topics
+          Clear All
         </button>
       </div>
 

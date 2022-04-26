@@ -13,9 +13,21 @@
 }
 
 .cards .btn {
-  padding: 4px 6px;
+  padding: 0.4rem 0.6rem;
   outline: 1px solid transparent;
 }
 .cards .btn:hover {
   outline: 1px solid white;
+}
+
+@media only screen and (max-width: 600px) {
+  .cards-title p {
+    font-size: 1.3rem;
+  }
+
+  .cards .btn {
+    height: unset;
+    padding: 0.3rem 2rem;
+    font-size: 1.2rem;
+  }
 }

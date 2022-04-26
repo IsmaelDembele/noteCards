@@ -9,6 +9,9 @@ import ArrowRightRoundedIcon from "@mui/icons-material/ArrowRightRounded";
 import "./cards.css";
 import { notify } from "../../utils/functions/function";
 import LoadingBar from "../loadingBar/LoadingBar";
+import { useMediaQuery } from "@mui/material";
+import { useEffect, useState } from "react";
+import ClearAll from "../clearAll/ClearAll";
 
 export type TCard = {
   front: string;
@@ -18,11 +21,14 @@ export type TCard = {
 };
 
 const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
+  const mobileMatche = useMediaQuery("(max-width:600px)");
   const appState = useAppSelector(state => state.app);
   const token = useAppSelector(state => state.auth.token) as string;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const [showClearAll, setShowClearAll] = useState<boolean>(false);
+  const [clearAllText, setClearAllText] = useState<string>("");
 
   const { data, isLoading } = useQuery(
     ["getCards", appState.topic, appState.subTopic, token],
@@ -46,21 +52,35 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
     }
   );
 
+  useEffect(() => {
+    clearAllText === "DELETE" && deleteCardsMutation.mutate({ token, topic, subTopic });
+    setClearAllText("");
+  }, [clearAllText,deleteCardsMutation,subTopic,topic,token]);
+
   return (
     <section className="cards">
       {(isLoading || deleteCardsMutation.isLoading) && <LoadingBar />}
+      {showClearAll && <ClearAll name="Cards" show={setShowClearAll} setText={setClearAllText} />}
+
       <div className="cards-title">
         <p>
-          {topic} <ArrowRightRoundedIcon sx={{ fontSize: "40px", color: "#fff" }} /> {subTopic}
+          {topic}
+          <ArrowRightRoundedIcon
+            sx={
+              mobileMatche
+                ? { fontSize: "25px", color: "#fff" }
+                : { fontSize: "40px", color: "#fff" }
+            }
+          />
+          {subTopic}
         </p>
         <button
           className="btn"
           onClick={() => {
-            const result = prompt("This will delete all the Cards: type DELETE to continue");
-            deleteCardsMutation.mutate({ token, topic, subTopic });
+            setShowClearAll(true);
           }}
         >
-          Delete Cards
+          Clear All
         </button>
       </div>
       {!appState.newCard && (

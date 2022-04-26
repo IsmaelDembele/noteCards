@@ -1,14 +1,16 @@
 import "./subTopic.css";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteSubTopic, deleteSubTopics, getSubTopic, renameSubTopic } from "../../apis/myApis";
-import { errorMsg, routes } from "../../utils/constantes/constantes";
+import { routes } from "../../utils/constantes/constantes";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewCards } from "../../features/application/appSlice";
 import { useNavigate } from "react-router-dom";
 import MyModal from "../myModal/MyModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { notify } from "../../utils/functions/function";
 import LoadingBar from "../loadingBar/LoadingBar";
+import { useMediaQuery } from "@mui/material";
+import ClearAll from "../clearAll/ClearAll";
 
 interface IProps {
   topic: string;
@@ -28,7 +30,10 @@ type TMutation = {
 };
 
 const SubTopic: React.FC<IProps> = ({ topic }) => {
+  const mobileMatche = useMediaQuery("(max-width:600px)");
   const [edit, setEdit] = useState<boolean>(false);
+  const [showClearAll, setShowClearAll] = useState<boolean>(false);
+  const [clearAllText, setClearAllText] = useState<string>("");
   const queryClient = useQueryClient();
   let navigate = useNavigate();
   const token = useAppSelector(state => state.auth.token) as string;
@@ -37,7 +42,7 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
     ["getSubtopic", topic, token],
     () => getSubTopic(topic, token),
     {
-      onError: (error:Error) => {   
+      onError: (error: Error) => {
         error && notify(error.message);
       },
     }
@@ -49,7 +54,7 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
       onSuccess: () => {
         queryClient.invalidateQueries(["getSubtopic", topic, token]);
       },
-      onError: (error:Error) => {   
+      onError: (error: Error) => {
         error && notify(error.message);
       },
     }
@@ -62,7 +67,7 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
         queryClient.invalidateQueries(["getSubtopic", topic, token]);
         setEdit(false);
       },
-      onError: (error:Error) => {   
+      onError: (error: Error) => {
         error && notify(error.message);
       },
     }
@@ -76,9 +81,13 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
         queryClient.invalidateQueries(["getSubtopic", topic, token]);
         setEdit(false);
       },
-
     }
   );
+
+  useEffect(() => {
+    clearAllText === "DELETE" && mutation.mutate({ token, topic });
+    setClearAllText("");
+  }, [clearAllText,mutation,token,topic]);
 
   return (
     <section className="sub-topic">
@@ -94,19 +103,22 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
         renameSubTopicMutation.isLoading ||
         deleteSubTopicMutation.isLoading ||
         mutation.isLoading) && <LoadingBar />}
+      {showClearAll && (
+        <ClearAll name="Subtopics" show={setShowClearAll} setText={setClearAllText} />
+      )}
+
       <div className="sub-topic-title">
         <p>{topic}</p>
         <button className="btn" onClick={() => setEdit(!edit)}>
-          Edit SubTopics
+          {mobileMatche ? "Edit" : "Edit SubTopics"}
         </button>
         <button
           className="btn"
           onClick={() => {
-            const result = prompt("This will delete all the subtopics: type DELETE to continue");
-            result === "DELETE" && mutation.mutate({ token, topic });
+            setShowClearAll(true);
           }}
         >
-          Delete SubTopics
+          Clear All
         </button>
       </div>
       <div className="list-items">

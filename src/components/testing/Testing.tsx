@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import "./testing.css";
-// import { useAppDispatch } from "../../app/hooks";
+import { notify } from "../../utils/functions/function";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../utils/constantes/constantes";
 
 interface ITestVariable {
   index: number;
@@ -21,7 +23,6 @@ const initialValue: ITestVariable = {
 type TTesting = {
   data: any;
   isSuccess: boolean;
-  // option?: string;
 };
 const timeoutTime = 500;
 
@@ -29,6 +30,7 @@ const Testing: React.FC<TTesting> = ({ data, isSuccess }) => {
   const [side, setSide] = useState<boolean>(true);
   const [testVariable, setTestVariable] = useState<ITestVariable>(initialValue);
   const [finish, setFinish] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isSuccess && testVariable.questionScored === data?.data.length) {
@@ -38,6 +40,15 @@ const Testing: React.FC<TTesting> = ({ data, isSuccess }) => {
     // eslint-disable-next-line
   }, [testVariable.questionScored]);
 
+  useEffect(() => {
+    if (isSuccess && data?.data.length === 0) {
+      notify(
+        "This Topic or Subtopic does not contained any cards. Please create a card and try again."
+      );
+      navigate(routes.test, { replace: true });
+    }
+  }, [isSuccess, navigate, data?.data.length]);
+
   const wrong = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
 
@@ -46,7 +57,6 @@ const Testing: React.FC<TTesting> = ({ data, isSuccess }) => {
       //to wait for the animation - if not we my see the answer of the
       setTimeout(() => {
         const { index, finish, questionScored } = testVariable;
-        console.log(testVariable);
         if (isSuccess && !finish && index < data?.data.length - 1) {
           setTestVariable({
             ...testVariable,
@@ -54,7 +64,7 @@ const Testing: React.FC<TTesting> = ({ data, isSuccess }) => {
             questionScored: questionScored + 1,
           });
         } else {
-          if (questionScored < data.data.length) {
+          if (questionScored < data?.data.length) {
             setTestVariable({
               ...testVariable,
               questionScored: questionScored + 1,
@@ -81,7 +91,7 @@ const Testing: React.FC<TTesting> = ({ data, isSuccess }) => {
             questionScored: questionScored + 1,
           });
         } else {
-          if (questionScored < data.data.length) {
+          if (questionScored < data?.data.length) {
             setTestVariable({
               ...testVariable,
               score: score + 1,
@@ -94,14 +104,18 @@ const Testing: React.FC<TTesting> = ({ data, isSuccess }) => {
     }
   };
 
+  if (isSuccess && data?.data.length === 0) {
+    return <div>Error</div>;
+  }
+
   return (
     <div className="testing">
       <div className="testing-question-number center">
         <span>
-          {isSuccess ? `Question ${testVariable.index + 1} out of ${data.data.length}` : ""}
+          {isSuccess ? `Question ${testVariable.index + 1} out of ${data?.data.length}` : ""}
         </span>
         <span className={finish ? "score" : ""}>
-          {isSuccess ? `Score ${testVariable.score} / ${data.data.length}` : ""}
+          {isSuccess ? `Score ${testVariable.score} / ${data?.data.length}` : ""}
         </span>
       </div>
 
@@ -109,8 +123,8 @@ const Testing: React.FC<TTesting> = ({ data, isSuccess }) => {
         <span>Check</span>
       </div>
       <div className={`display_text testing-question ${side ? "" : "flip"}`}>
-        <div className="text_front ">{isSuccess && data.data[testVariable.index].front}</div>
-        <div className="text_back">{isSuccess && data.data[testVariable.index].back}</div>
+        <div className="text_front ">{isSuccess && data?.data[testVariable.index].front}</div>
+        <div className="text_back">{isSuccess && data?.data[testVariable.index].back}</div>
       </div>
 
       <div className="testing-wrong center" onClick={e => wrong(e)}>

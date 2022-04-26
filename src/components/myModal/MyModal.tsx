@@ -1,8 +1,5 @@
-import { AxiosResponse } from "axios";
 import React, { useState } from "react";
-import { UseMutationResult } from "react-query";
 import { useAppSelector } from "../../app/hooks";
-import { ITopics } from "../topics/Topics";
 import "./myModal.css";
 
 type TMyModal = {
