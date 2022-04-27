@@ -19,7 +19,7 @@
 .sub-topic .sub-topic-title .btn:hover {
   background-color: var(--laurel-green);
 }
-*/ .sub-topic .sub-topic-title .add-subtopic {
+.sub-topic .sub-topic-title .add-subtopic {
   width: auto;
   display: flex;
   align-items: center;
