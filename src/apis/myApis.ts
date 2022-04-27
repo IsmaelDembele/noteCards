@@ -43,21 +43,23 @@ const pathRoutes = {
   CHANGE_PASSWORD: "/changePassword",
 };
 
+const _path: string = process.env.REACT_APP_PATH as string;
+
 export const getCard = async (topic: string, subTopic: string, token: string) => {
   if (!topic || !subTopic || !token) return null;
   return await axios.get(
-    `http://localhost:5000${pathRoutes.GET_CARD}/?topic=${topic}&subTopic=${subTopic}&token=${token}`
+    `${_path}${pathRoutes.GET_CARD}/?topic=${topic}&subTopic=${subTopic}&token=${token}`
   );
 };
 
 export const getCards = async (topic: string, subTopic: string, token: string) => {
   return await axios.get(
-    `http://localhost:5000${pathRoutes.GET_CARDS}/?topic=${topic}&subTopic=${subTopic}&token=${token}`
+    `${_path}${pathRoutes.GET_CARDS}/?topic=${topic}&subTopic=${subTopic}&token=${token}`
   );
 };
 
 export const addCards = async ({ topic, subTopic, front, back, note, token }: IReadCard) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.ADD_CARDS}`, {
+  return await axios.post(`${_path}${pathRoutes.ADD_CARDS}`, {
     topic,
     subTopic,
     front,
@@ -70,9 +72,7 @@ export const addCards = async ({ topic, subTopic, front, back, note, token }: IR
 export const getSubTopic = async (topic: string, token: string) => {
   if (topic.length === 0 || !token) return null;
 
-  return await axios.get(
-    `http://localhost:5000${pathRoutes.GET_SUB_TOPIC}/?topic=${topic}&token=${token}`
-  );
+  return await axios.get(`${_path}${pathRoutes.GET_SUB_TOPIC}/?topic=${topic}&token=${token}`);
 };
 
 export const postSubTopic = async ({
@@ -86,7 +86,7 @@ export const postSubTopic = async ({
 }) => {
   if (subtopic.length === 0 || !token || token.length === 0) return null;
 
-  return await axios.post(`http://localhost:5000${pathRoutes.POST_SUB_TOPIC}`, {
+  return await axios.post(`${_path}${pathRoutes.POST_SUB_TOPIC}`, {
     subtopic,
     topic,
     token,
@@ -95,26 +95,26 @@ export const postSubTopic = async ({
 
 export const getTopics = async (token: string) => {
   if (!token) return null;
-  return await axios.get(`http://localhost:5000${pathRoutes.GET_TOPIC}/?token=${token}`);
+  return await axios.get(`${_path}${pathRoutes.GET_TOPIC}/?token=${token}`);
 };
 
 export const postTopic = async ({ topic, token }: { topic: string; token: string }) => {
   if (topic.length < 1 || token.length < 0) return null;
-  return await axios.post(`http://localhost:5000${pathRoutes.POST_TOPIC}`, { topic, token });
+  return await axios.post(`${_path}${pathRoutes.POST_TOPIC}`, { topic, token });
 };
 
 //islogged axios
 export const getLogged = async (token: string) => {
   if (token === "") return null;
-  return await axios.get(`http://localhost:5000${pathRoutes.IS_LOGGED}/?token=${token}`);
+  return await axios.get(`${_path}${pathRoutes.IS_LOGGED}/?token=${token}`);
 };
 
 export const postLogged = async (logginInfo: IAuthState) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.SIGN_IN}`, { logginInfo });
+  return await axios.post(`${_path}${pathRoutes.SIGN_IN}`, { logginInfo });
 };
 
 export const postCreateAccount = async (signupInfo: ISignup) => {
-  return await await axios.post(`http://localhost:5000${pathRoutes.CREATE_ACCOUNT}`, {
+  return await await axios.post(`${_path}${pathRoutes.CREATE_ACCOUNT}`, {
     signupInfo,
   });
 };
@@ -128,7 +128,7 @@ export const updateCard = async (
   token: string,
   cardID: string
 ) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.UPDATE_CARD}`, {
+  return await axios.post(`${_path}${pathRoutes.UPDATE_CARD}`, {
     topic,
     subTopic,
     front,
@@ -140,19 +140,19 @@ export const updateCard = async (
 };
 
 export const deleteCard = async (token: string, cardID: string) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_CARD}`, { token, cardID });
+  return await axios.post(`${_path}${pathRoutes.DELETE_CARD}`, { token, cardID });
 };
 
 export const deleteTopics = async (token: string) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_TOPICS}`, { token });
+  return await axios.post(`${_path}${pathRoutes.DELETE_TOPICS}`, { token });
 };
 
 export const deleteSubTopics = async (token: string, topic: string) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_SUB_TOPICS}`, { token, topic });
+  return await axios.post(`${_path}${pathRoutes.DELETE_SUB_TOPICS}`, { token, topic });
 };
 
 export const deleteCards = async (token: string, topic: string, subTopic: string) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_CARDS}`, {
+  return await axios.post(`${_path}${pathRoutes.DELETE_CARDS}`, {
     token,
     topic,
     subTopic,
@@ -160,11 +160,11 @@ export const deleteCards = async (token: string, topic: string, subTopic: string
 };
 
 export const deleteTopic = async (topic: string, token: string) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_TOPIC}`, { token, topic });
+  return await axios.post(`${_path}${pathRoutes.DELETE_TOPIC}`, { token, topic });
 };
 
 export const renameTopic = async (token: string, topic: string, newTopic: string) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.RENAME_TOPIC}`, {
+  return await axios.post(`${_path}${pathRoutes.RENAME_TOPIC}`, {
     token,
     topic,
     newTopic,
@@ -172,7 +172,7 @@ export const renameTopic = async (token: string, topic: string, newTopic: string
 };
 
 export const deleteSubTopic = async (token: string, topic: string, subTopic: string) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_SUB_TOPIC}`, {
+  return await axios.post(`${_path}${pathRoutes.DELETE_SUB_TOPIC}`, {
     token,
     topic,
     subTopic,
@@ -185,7 +185,7 @@ export const renameSubTopic = async (
   subTopic: string,
   newSubTopic: string
 ) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.RENAME_SUB_TOPIC}`, {
+  return await axios.post(`${_path}${pathRoutes.RENAME_SUB_TOPIC}`, {
     token,
     topic,
     subTopic,
@@ -194,25 +194,25 @@ export const renameSubTopic = async (
 };
 
 export const getAllCards = async (token: string) => {
-  return await axios.post(`http://localhost:5000${pathRoutes.GET_ALL_CARDS}`, { token });
+  return await axios.post(`${_path}${pathRoutes.GET_ALL_CARDS}`, { token });
 };
 
 export const getAllCardsOfTopic = async (token: string, topic: string) => {
   if (topic.length === 0) return null;
 
   return await axios.get(
-    `http://localhost:5000${pathRoutes.GEL_ALL_CARDS_OF_TOPIC}/?token=${token}&topic=${topic}`
+    `${_path}${pathRoutes.GEL_ALL_CARDS_OF_TOPIC}/?token=${token}&topic=${topic}`
   );
 };
 
 export const deleteAccount = async (token: string, password: string) => {
   if (!password || !token) return null;
-  return await axios.post(`http://localhost:5000${pathRoutes.DELETE_ACCOUNT}`, { token, password });
+  return await axios.post(`${_path}${pathRoutes.DELETE_ACCOUNT}`, { token, password });
 };
 
 export const changePassword = async (token: string, password: string, newPassword: string) => {
   if (!password || !token) return null;
-  return await axios.post(`http://localhost:5000${pathRoutes.CHANGE_PASSWORD}`, {
+  return await axios.post(`${_path}${pathRoutes.CHANGE_PASSWORD}`, {
     token,
     password,
     newPassword,

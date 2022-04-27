@@ -1,4 +1,4 @@
-import { toast, Zoom, ToastOptions } from "react-toastify";
+import { toast} from "react-toastify";
 
 export const notify = (msg: string, detail = "") => {
   switch (detail) {
