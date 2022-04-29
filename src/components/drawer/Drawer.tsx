@@ -5,17 +5,20 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { routes } from "../../utils/constantes/constantes";
 import { account, review, test } from "../../features/application/appSlice";
 import "./drawer.css";
+import { useMediaQuery } from "@mui/material";
 
 const Drawer = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const token = useAppSelector(state => state.auth.token) as string;
+  const mobileMatche = useMediaQuery("(max-width:600px)");
+  const visibleMobileDrawer = useAppSelector(state => state.app.mobileDrawerVisible);
   const { data, isSuccess } = useQuery(["islogged", token], () => getLogged(token), {
     staleTime: 5000,
   });
 
   return (
-    <section className="drawer">
+    <section className="drawer" style={!visibleMobileDrawer && mobileMatche ? {display:'none'} : {}}>
       <div className="welcome">Welcome {isSuccess ? data?.data.firstname : ""}</div>
       <button
         className="btn menu"

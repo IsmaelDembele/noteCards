@@ -16,6 +16,7 @@ export interface IAppState {
   newCard: false;
   testTopic: string;
   testSubtopic: string;
+  mobileDrawerVisible: boolean;
 }
 
 const initialState: IAppState = {
@@ -27,6 +28,7 @@ const initialState: IAppState = {
   newCard: false,
   testTopic: "",
   testSubtopic: "",
+  mobileDrawerVisible: false,
 };
 
 export const appSlice = createSlice({
@@ -99,6 +101,9 @@ export const appSlice = createSlice({
 
       state.route = routes.topics;
     },
+    toggleMobileDrawer: state => {
+      state.mobileDrawerVisible = !state.mobileDrawerVisible;
+    },
   },
 });
 
@@ -115,6 +120,7 @@ export const {
   account,
   setTestTopic,
   setTestSubTopic,
+  toggleMobileDrawer,
 } = appSlice.actions;
 
 export default appSlice.reducer;

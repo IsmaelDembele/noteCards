@@ -4,13 +4,18 @@ import { postSubTopic, postTopic } from "../../apis/myApis";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { signOut } from "../../features/authentication/authSlice";
 import { useState } from "react";
+import MenuIcon from "@mui/icons-material/Menu";
 
 import MyForm from "./MyForm";
 import { errorMsg, routes } from "../../utils/constantes/constantes";
 import { notify } from "../../utils/functions/function";
 import LoadingBar from "../loadingBar/LoadingBar";
+import { useMediaQuery } from "@mui/material";
+import { toggleMobileDrawer } from "../../features/application/appSlice";
 
 const Nav = () => {
+  const mobileMatche = useMediaQuery("(max-width:600px)");
+  const visibleMobileDrawer = useAppSelector(state => state.app.mobileDrawerVisible);
   const queryClient = useQueryClient();
   const [inputValue, setInputValue] = useState<string>("");
   const dispatch = useAppDispatch();
@@ -65,7 +70,17 @@ const Nav = () => {
   return (
     <>
       {(mutation.isLoading || subTopicMutation.isLoading) && <LoadingBar />}
-      <nav className="nav">
+      <nav
+        className="nav"
+        style={mobileMatche && !visibleMobileDrawer ? { gridColumn: "1 / end" } : {}}
+      >
+        {mobileMatche && (
+          <MenuIcon
+            sx={{ fontSize: 23, marginLeft: "7%" }}
+            style={{ cursor: "pointer" }}
+            onClick={() => {dispatch(toggleMobileDrawer())}}
+          />
+        )}
         <MyForm handleSubmit={handleSubmit} inputValue={inputValue} setInputValue={setInputValue} />
         <button
           className="btn nav-btn"

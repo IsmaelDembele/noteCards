@@ -23,6 +23,8 @@ const ClearAll = ({ name, show, setText }: TClearAll) => {
           Cancel
         </button>
         <button
+          disabled={input === ""}
+          style={input === "" ? { backgroundColor: "#eee", cursor: "default" } : {}}
           type="submit"
           className="btn"
           onClick={() => {

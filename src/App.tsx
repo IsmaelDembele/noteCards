@@ -15,14 +15,25 @@ import Test from "./components/test/Test";
 import TestOption from "./components/testOptions/TestOptions";
 import { ToastContainer, Zoom } from "react-toastify";
 import Account from "./components/account/Account";
+import { useMediaQuery } from "@mui/material";
 
 const App = () => {
   const isLogged = useAppSelector(state => state.auth.isLogged);
   const appState = useAppSelector(state => state.app);
   const location = useLocation();
 
+  const mobileMatche = useMediaQuery("(max-width:600px)");
+  const visibleMobileDrawer = useAppSelector(state => state.app.mobileDrawerVisible);
+
   return (
-    <div className="app">
+    <div
+      className="app"
+      style={
+        !visibleMobileDrawer && mobileMatche
+          ? { gridTemplateColumns: "1fr" }
+          : { gridTemplateColumns: "minmax(11rem,14.7%) 1fr" }
+      }
+    >
       {location.pathname === routes.signin || location.pathname === routes.signup ? "" : <Nav />}
       {location.pathname === routes.signin || location.pathname === routes.signup ? "" : <Drawer />}
       <ToastContainer

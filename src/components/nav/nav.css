@@ -2,7 +2,6 @@
   background-color: var(--russian-green);
   height: 100%;
   width: 100%;
-
   grid-column: 2 / end;
   grid-row: 1 / 2;
   display: flex;
@@ -73,15 +72,22 @@
 /* --------------PHONE LAYOUT --------------------------*/
 
 @media only screen and (max-width: 600px) {
+  .nav{
+    justify-content: space-between;
+  }
   .nav-input {
     width: 13rem;
     margin-right: .5rem;
   }
   .nav-btn {
+    margin-left: unset;
     width: 8rem;
     font-size: 1.2rem;
   }
 
+  .nav-form {
+    margin: 0;
+  }
   .card-nav-btn {
     font-size: 1.1rem;
     padding-left: 1em;

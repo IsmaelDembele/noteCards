@@ -20,7 +20,6 @@
 }
 
 /* --------------PHONE LAYOUT --------------------------*/
-
 @media only screen and (max-width: 600px) {
   .drawer {
     letter-spacing: 0.3rem;
