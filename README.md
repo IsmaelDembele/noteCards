@@ -1,3 +1,15 @@
+# NoteCard
+
+visite the site at https://notecard.netlify.app
+
+    You can test the app with a@a.com with password '12345' or create a new account.
+
+    Once you have created an account, you can add notecards by Topics and Subtopics.
+
+    You can also take tests on the cards you have created.
+
+    Note: you cannot take a test if there if you have not created any cards.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
