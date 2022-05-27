@@ -5,18 +5,18 @@ import {
   localStorageTopicKey,
   routes,
   localStorageSubTopicKey,
+  routeExpirationTime,
 } from "../../utils/constantes/constantes";
+import { get, set } from "../../utils/functions/function";
 
 export interface IAuthState {
   isLogged?: boolean;
   token?: string;
 }
 
-const storage = JSON.parse(localStorage.getItem(localStorageAuthTokenKey) as string);
-
 const initialState: IAuthState = {
   isLogged: false,
-  token: (localStorage.getItem(localStorageAuthTokenKey) && storage?.token) || "",
+  token: get(localStorageAuthTokenKey) || "",
 };
 
 export const authSlice = createSlice({
@@ -31,7 +31,7 @@ export const authSlice = createSlice({
       state.token = token;
     },
     signOut: state => {
-      localStorage.setItem(localStorageRouteKey, routes.topics);
+      set(localStorageRouteKey, routes.topics, routeExpirationTime);
       localStorage.removeItem(localStorageAuthTokenKey);
       localStorage.removeItem(localStorageTopicKey);
       localStorage.removeItem(localStorageSubTopicKey);

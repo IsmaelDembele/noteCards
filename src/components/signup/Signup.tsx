@@ -26,7 +26,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const mutation = useMutation((values: ISignup) => postCreateAccount(values), {
     onSuccess: data => {
-      data?.data === "ok" && navigate("/");
+      data?.data === "ok" && navigate(routes.topics);
       notify("Account created", "info");
     },
   });

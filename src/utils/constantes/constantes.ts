@@ -3,6 +3,8 @@ export const localStorageRouteKey = "route";
 export const localStorageTopicKey = "topic";
 export const localStorageSubTopicKey = "subTopic";
 export const localStorageCardIdKey = "cardId";
+export const oneDay = 24 * 60 * 60 * 1000; // 1 day
+export const routeExpirationTime = 60 * 60 * 1000; // 1h
 export const routes = {
   topics: "/",
   subtopic: "/subTopic",

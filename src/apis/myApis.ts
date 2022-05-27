@@ -45,8 +45,6 @@ const pathRoutes = {
 
 const _path: string = process.env.REACT_APP_PATH as string;
 
-console.log(_path);
-
 export const getCard = async (topic: string, subTopic: string, token: string) => {
   if (!topic || !subTopic || !token) return null;
   return await axios.get(

@@ -18,7 +18,7 @@ const Account: React.FC = () => {
     ["islogged", state.token],
     () => getLogged(state.token as string),
     {
-      staleTime: 5000,
+      staleTime: 5000, //give the function enough time to check the value in the cache
       onError: (error: Error) => {
         error && notify(error.message);
       },

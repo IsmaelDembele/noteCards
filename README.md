@@ -2,7 +2,6 @@
 
 https://user-images.githubusercontent.com/66928079/169542571-2419a5c5-0137-479a-bfac-d19d6969486f.mov
 
-
 visite the site at https://notecard.netlify.app
 
     You can test the app with a@a.com with password '12345' or create a new account.

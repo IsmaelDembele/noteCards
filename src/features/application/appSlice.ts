@@ -4,8 +4,10 @@ import {
   localStorageRouteKey,
   localStorageSubTopicKey,
   localStorageTopicKey,
+  routeExpirationTime,
   routes,
 } from "../../utils/constantes/constantes";
+import { get, set } from "../../utils/functions/function";
 
 export interface IAppState {
   route: string;
@@ -20,10 +22,10 @@ export interface IAppState {
 }
 
 const initialState: IAppState = {
-  route: localStorage.getItem(localStorageRouteKey) || routes.topics,
-  topic: localStorage.getItem(localStorageTopicKey) || "",
-  subTopic: localStorage.getItem(localStorageSubTopicKey) || "",
-  cardID: localStorage.getItem(localStorageCardIdKey) || "",
+  route: get(localStorageRouteKey) || routes.topics,
+  topic: get(localStorageTopicKey) || "",
+  subTopic: get(localStorageSubTopicKey) || "",
+  cardID: get(localStorageCardIdKey) || "",
   cardIndex: -1,
   newCard: false,
   testTopic: "",
@@ -42,13 +44,13 @@ export const appSlice = createSlice({
       state.route = routes.subtopic;
       state.topic = action.payload;
 
-      localStorage.setItem(localStorageRouteKey, routes.subtopic);
-      localStorage.setItem(localStorageTopicKey, action.payload);
+      set(localStorageRouteKey, routes.subtopic, routeExpirationTime);
+      set(localStorageTopicKey, action.payload, routeExpirationTime);
     },
     viewCards: (state, action) => {
-      localStorage.setItem(localStorageTopicKey, action.payload.topic);
-      localStorage.setItem(localStorageSubTopicKey, action.payload.subTopic);
-      localStorage.setItem(localStorageRouteKey, routes.cards);
+      set(localStorageTopicKey, action.payload.topic, routeExpirationTime);
+      set(localStorageSubTopicKey, action.payload.subTopic, routeExpirationTime);
+      set(localStorageRouteKey, routes.cards, routeExpirationTime);
 
       state.route = routes.cards;
       state.topic = action.payload.topic;
@@ -56,7 +58,7 @@ export const appSlice = createSlice({
       state.newCard = false;
     },
     viewCard: (state, action) => {
-      localStorage.setItem(localStorageCardIdKey, action.payload);
+      set(localStorageCardIdKey, action.payload, routeExpirationTime);
 
       state.route = routes.card;
       state.cardIndex = action.payload;
@@ -71,7 +73,7 @@ export const appSlice = createSlice({
       state.newCard = action.payload;
     },
     account: state => {
-      localStorage.setItem(localStorageRouteKey, routes.account);
+      set(localStorageRouteKey, routes.account, routeExpirationTime);
       localStorage.removeItem(localStorageTopicKey);
       localStorage.removeItem(localStorageSubTopicKey);
       localStorage.removeItem(localStorageCardIdKey);
@@ -79,7 +81,7 @@ export const appSlice = createSlice({
       state.route = routes.account;
     },
     test: state => {
-      localStorage.setItem(localStorageRouteKey, routes.test);
+      set(localStorageRouteKey, routes.test, routeExpirationTime);
       localStorage.removeItem(localStorageTopicKey);
       localStorage.removeItem(localStorageSubTopicKey);
       localStorage.removeItem(localStorageCardIdKey);

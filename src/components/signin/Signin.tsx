@@ -6,48 +6,58 @@ import { useMutation, useQuery } from "react-query";
 import { getLogged, postLogged } from "../../apis/myApis";
 import { getToken, IAuthState, setSignin, signOut } from "../../features/authentication/authSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { localStorageAuthTokenKey, routes } from "../../utils/constantes/constantes";
+import { localStorageAuthTokenKey, oneDay, routes } from "../../utils/constantes/constantes";
 import { setRoute } from "../../features/application/appSlice";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingBar from "../loadingBar/LoadingBar";
-import { notify } from "../../utils/functions/function";
+import { get, notify, set } from "../../utils/functions/function";
 import { ErrorMsg, Label } from "../signup/Signup";
+
+const initialValues = { email: "", password: "" };
 
 const Signin = () => {
   let navigate = useNavigate();
-  const initialValues = { email: "", password: "" };
   const dispatch = useAppDispatch();
   const state = useAppSelector(state => state.auth);
   const route = useAppSelector(state => state.app.route);
 
+  //we check to see if the user is already login in
   const { isLoading } = useQuery(
     ["islogged", state.token],
     () => getLogged(state.token as string),
     {
       onSuccess: data => {
-        if (!localStorage.getItem(localStorageAuthTokenKey) && (state.token as string).length > 0) {
-          //save the token
+        if (!get(localStorageAuthTokenKey) && (state.token as string).length > 0) {
+          //if we have a token that has not been store in local/storage yet, we store it
           const authToken = {
             token: state.token,
           };
-          localStorage.setItem(localStorageAuthTokenKey, JSON.stringify(authToken, null, 2));
+          set(localStorageAuthTokenKey, authToken, oneDay); //----
         }
 
+        //if the token has been decoded successfully that means we are connected
         if (data?.data.email && data?.data.firstname) {
           dispatch(setSignin(true));
           navigate(route);
         } else {
+          //if the token could not be decoded then set the route to '/' and signout
           dispatch(setRoute(routes.topics));
           dispatch(signOut());
         }
       },
       onError: (error: Error) => {
+        // if there is an error display an error message
         error && notify(error.message);
       },
+      // cache the request because it is going to be call couple of time when we first login
       cacheTime: 1,
     }
   );
 
+  /**
+   * If there is no token or the token is not valid anymore we execute this
+   * mutation in order to obtain a new one
+   */
   const mutation = useMutation((values: IAuthState) => postLogged(values), {
     onSuccess: async data => {
       if (data?.data?.msg === "ok") {
