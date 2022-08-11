@@ -22,22 +22,18 @@ const Card: React.FC = () => {
   const [validArrowLeft, setValidArrowLeft] = useState<boolean>();
   let navigate = useNavigate();
   const appState = useAppSelector(state => state.app);
-  const token = useAppSelector(state => state.auth.token);
-  const { data, isSuccess } = useQuery(["getCard", appState.topic, appState.subTopic, token], () =>
-    getCard(appState.topic, appState.subTopic, token as string)
+  const { data, isSuccess } = useQuery(["getCard", appState.topic, appState.subTopic], () =>
+    getCard(appState.topic, appState.subTopic)
   );
-  const deleteMutation = useMutation(
-    ({ token, cardID }: { token: string; cardID: string }) => deleteCard(token, cardID),
-    {
-      onSuccess: () => {
-        navigate(routes.cards);
-        dispatch(viewCards(appState));
-      },
-      onError: error => {
-        error && notify(errorMsg);
-      },
-    }
-  );
+  const deleteMutation = useMutation(({ cardID }: { cardID: string }) => deleteCard(cardID), {
+    onSuccess: () => {
+      navigate(routes.cards);
+      dispatch(viewCards(appState));
+    },
+    onError: error => {
+      error && notify(errorMsg);
+    },
+  });
 
   useEffect(() => {
     if (isSuccess) {
@@ -97,7 +93,7 @@ const Card: React.FC = () => {
             <button
               className="btn"
               onClick={() => {
-                deleteMutation.mutate({ token: token as string, cardID: currentCard._id });
+                deleteMutation.mutate({ cardID: currentCard._id });
               }}
             >
               Delete

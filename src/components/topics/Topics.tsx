@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteTopic, deleteTopics, getTopics, renameTopic } from "../../apis/myApis";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { viewSubtopics } from "../../features/application/appSlice";
 import "./topics.css";
 import { useNavigate } from "react-router-dom";
@@ -24,43 +24,38 @@ const Topics = () => {
   const [edit, setEdit] = useState<boolean>(false);
   const [showClearAll, setShowClearAll] = useState<boolean>(false);
   const [clearAllText, setClearAllText] = useState<string>("");
-  const token = useAppSelector(state => state.auth.token) as string;
   const queryClient = useQueryClient();
-  const { data, isSuccess, isLoading } = useQuery(["getTopics", token], () => getTopics(token), {
+  const { data, isSuccess, isLoading } = useQuery(["getTopics"], () => getTopics(), {
     onError: (error: Error) => {
       error && notify(error.message);
     },
   });
 
-  const deleteTopicsMutation = useMutation((token: string) => deleteTopics(token), {
+  const deleteTopicsMutation = useMutation(() => deleteTopics(), {
     onSuccess: () => {
-      queryClient.invalidateQueries(["getTopics", token]);
+      queryClient.invalidateQueries("getTopics");
     },
     onError: (error: Error) => {
       error && notify(error.message);
     },
   });
 
-  const deleteTopicMutation = useMutation(
-    ({ topic, token }: { topic: string; token: string }) => deleteTopic(topic, token),
-    {
-      onSuccess: () => {
-        setEdit(false);
-        queryClient.invalidateQueries(["getTopics", token]);
-      },
-      onError: (error: Error) => {
-        error && notify(error.message);
-      },
-    }
-  );
+  const deleteTopicMutation = useMutation(({ topic }: { topic: string }) => deleteTopic(topic), {
+    onSuccess: () => {
+      setEdit(false);
+      queryClient.invalidateQueries("getTopics");
+    },
+    onError: (error: Error) => {
+      error && notify(error.message);
+    },
+  });
 
   const renameTopicMutation = useMutation(
-    ({ token, topic, newTopic }: { token: string; topic: string; newTopic: string }) =>
-      renameTopic(token, topic, newTopic),
+    ({ topic, newTopic }: { topic: string; newTopic: string }) => renameTopic(topic, newTopic),
     {
       onSuccess: () => {
         setEdit(false);
-        queryClient.invalidateQueries(["getTopics", token]);
+        queryClient.invalidateQueries(["getTopics"]);
       },
       onError: (error: Error) => {
         error && notify(error.message);
@@ -69,9 +64,9 @@ const Topics = () => {
   );
 
   useEffect(() => {
-    clearAllText === "DELETE" && deleteTopicsMutation.mutate(token);
+    clearAllText === "DELETE" && deleteTopicsMutation.mutate();
     setClearAllText("");
-  }, [clearAllText, deleteTopicsMutation, token]);
+  }, [clearAllText, deleteTopicsMutation]);
 
   return (
     <section className="topics">

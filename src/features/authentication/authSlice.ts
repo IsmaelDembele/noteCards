@@ -9,14 +9,18 @@ import {
 } from "../../utils/constantes/constantes";
 import { get, set } from "../../utils/functions/function";
 
-export interface IAuthState {
+export type IAuthState = {
   isLogged?: boolean;
   token?: string;
-}
+  email: string;
+  password: string;
+};
 
 const initialState: IAuthState = {
   isLogged: false,
   token: get(localStorageAuthTokenKey) || "",
+  email: "",
+  password: "",
 };
 
 export const authSlice = createSlice({

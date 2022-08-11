@@ -2,7 +2,7 @@ import "./subTopic.css";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteSubTopic, deleteSubTopics, getSubTopic, renameSubTopic } from "../../apis/myApis";
 import { routes } from "../../utils/constantes/constantes";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { viewCards } from "../../features/application/appSlice";
 import { useNavigate } from "react-router-dom";
 import MyModal from "../myModal/MyModal";
@@ -23,7 +23,6 @@ interface ISubTopic {
 }
 
 type TMutation = {
-  token: string;
   topic: string;
   subTopic: string;
   newSubTopic?: string;
@@ -36,11 +35,10 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
   const [clearAllText, setClearAllText] = useState<string>("");
   const queryClient = useQueryClient();
   let navigate = useNavigate();
-  const token = useAppSelector(state => state.auth.token) as string;
   const dispatch = useAppDispatch();
   const { data, isSuccess, isLoading } = useQuery(
-    ["getSubtopic", topic, token],
-    () => getSubTopic(topic, token),
+    ["getSubtopic", topic],
+    () => getSubTopic(topic),
     {
       onError: (error: Error) => {
         error && notify(error.message);
@@ -48,23 +46,20 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
     }
   );
 
-  const mutation = useMutation(
-    ({ token, topic }: { token: string; topic: string }) => deleteSubTopics(token, topic),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["getSubtopic", topic, token]);
-      },
-      onError: (error: Error) => {
-        error && notify(error.message);
-      },
-    }
-  );
+  const mutation = useMutation(({ topic }: { topic: string }) => deleteSubTopics(topic), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getSubtopic", topic]);
+    },
+    onError: (error: Error) => {
+      error && notify(error.message);
+    },
+  });
 
   const deleteSubTopicMutation = useMutation(
-    ({ token, topic, subTopic }: TMutation) => deleteSubTopic(token, topic, subTopic),
+    ({ topic, subTopic }: TMutation) => deleteSubTopic(topic, subTopic),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["getSubtopic", topic, token]);
+        queryClient.invalidateQueries(["getSubtopic", topic]);
         setEdit(false);
       },
       onError: (error: Error) => {
@@ -74,20 +69,20 @@ const SubTopic: React.FC<IProps> = ({ topic }) => {
   );
 
   const renameSubTopicMutation = useMutation(
-    ({ token, topic, subTopic, newSubTopic }: TMutation) =>
-      renameSubTopic(token, topic, subTopic, newSubTopic as string),
+    ({ topic, subTopic, newSubTopic }: TMutation) =>
+      renameSubTopic(topic, subTopic, newSubTopic as string),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["getSubtopic", topic, token]);
+        queryClient.invalidateQueries(["getSubtopic", topic]);
         setEdit(false);
       },
     }
   );
 
   useEffect(() => {
-    clearAllText === "DELETE" && mutation.mutate({ token, topic });
+    clearAllText === "DELETE" && mutation.mutate({ topic });
     setClearAllText("");
-  }, [clearAllText,mutation,token,topic]);
+  }, [clearAllText, mutation, topic]);
 
   return (
     <section className="sub-topic">

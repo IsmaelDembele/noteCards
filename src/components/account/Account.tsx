@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import React, { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { changePassword, deleteAccount, getLogged } from "../../apis/myApis";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { signOut } from "../../features/authentication/authSlice";
 import { notify } from "../../utils/functions/function";
 import LoadingBar from "../loadingBar/LoadingBar";
@@ -13,17 +13,12 @@ import { ErrorMsg } from "../signup/Signup";
 const Account: React.FC = () => {
   const [changePassword, setChangePassword] = useState(false);
   const [deleteAccount, setDeleteAccount] = useState(false);
-  const state = useAppSelector(state => state.auth);
-  const { data, isSuccess, isLoading } = useQuery(
-    ["islogged", state.token],
-    () => getLogged(state.token as string),
-    {
-      staleTime: 5000, //give the function enough time to check the value in the cache
-      onError: (error: Error) => {
-        error && notify(error.message);
-      },
-    }
-  );
+  const { data, isSuccess, isLoading } = useQuery(["islogged"], () => getLogged(), {
+    staleTime: 5000, //give the function enough time to check the value in the cache
+    onError: (error: Error) => {
+      error && notify(error.message);
+    },
+  });
 
   return (
     <section className="account ">
@@ -76,7 +71,6 @@ interface IPasswordModal {
 }
 
 type TPasswordChange = {
-  token: string;
   password: string;
   newPassword: string;
 };
@@ -87,11 +81,8 @@ const initialValues = {
   newPasswordConfirm: "",
 };
 const PasswordModal = ({ setChangePassword }: IPasswordModal) => {
-  const token = useAppSelector(state => state.auth.token) as string;
-
   const mutation = useMutation(
-    ({ token, password, newPassword }: TPasswordChange) =>
-      changePassword(token, password, newPassword),
+    ({ password, newPassword }: TPasswordChange) => changePassword(password, newPassword),
     {
       onSuccess: data => {
         if (data?.data === "wrong password") notify("Wrong Password");
@@ -115,7 +106,7 @@ const PasswordModal = ({ setChangePassword }: IPasswordModal) => {
           .required("Required"),
       })}
       onSubmit={(values, { resetForm }) => {
-        mutation.mutate({ token, password: values.password, newPassword: values.newPassword });
+        mutation.mutate({ password: values.password, newPassword: values.newPassword });
         resetForm();
         setChangePassword(false);
       }}
@@ -160,12 +151,11 @@ interface IDeleteAccountModal {
 }
 
 const DeleteAccountModal = ({ setDeleteAccount }: IDeleteAccountModal) => {
-  const state = useAppSelector(state => state.auth);
   const [password, setPassword] = useState<string>("");
   const dispatch = useAppDispatch();
 
   const deleteAccountMutation = useMutation(
-    ({ token, password }: { token: string; password: string }) => deleteAccount(token, password),
+    ({ password }: { password: string }) => deleteAccount(password),
     {
       onSuccess: data => {
         data?.data === "wrong password" && notify("Wrong Password!");
@@ -188,7 +178,7 @@ const DeleteAccountModal = ({ setDeleteAccount }: IDeleteAccountModal) => {
         <button
           className="delete-account-submit btn"
           onClick={() => {
-            deleteAccountMutation.mutate({ token: state.token as string, password });
+            deleteAccountMutation.mutate({ password });
             setDeleteAccount(false);
           }}
         >

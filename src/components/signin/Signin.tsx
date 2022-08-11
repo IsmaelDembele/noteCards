@@ -13,6 +13,9 @@ import LoadingBar from "../loadingBar/LoadingBar";
 import { get, notify, set } from "../../utils/functions/function";
 import { ErrorMsg, Label } from "../signup/Signup";
 
+import axios from "axios";
+axios.defaults.withCredentials = true;
+
 const initialValues = { email: "", password: "" };
 
 const Signin = () => {
@@ -21,16 +24,16 @@ const Signin = () => {
   const state = useAppSelector(state => state.auth);
   const route = useAppSelector(state => state.app.route);
 
-  //we check to see if the user is already login in
+  //check to see if the user is already login in
   const { isLoading } = useQuery(
-    ["islogged", state.token],
-    () => getLogged(state.token as string),
+    ["islogged"],
+    () => getLogged(), //axios.post
     {
       onSuccess: data => {
-        if (!get(localStorageAuthTokenKey) && (state.token as string).length > 0) {
+        if (!get(localStorageAuthTokenKey)) {
           //if we have a token that has not been store in local/storage yet, we store it
           const authToken = {
-            token: state.token,
+            token: "cookie based token",
           };
           set(localStorageAuthTokenKey, authToken, oneDay); //----
         }
@@ -61,8 +64,10 @@ const Signin = () => {
   const mutation = useMutation((values: IAuthState) => postLogged(values), {
     onSuccess: async data => {
       if (data?.data?.msg === "ok") {
-        const { token, msg, email, firstname, lastname } = data?.data;
-        dispatch(getToken({ token, msg, email, firstname, lastname }));
+        const { msg, email, firstname, lastname } = data?.data;
+
+        navigate(route);
+        dispatch(getToken({ msg, email, firstname, lastname }));
       }
     },
     onError: (error: Error) => {

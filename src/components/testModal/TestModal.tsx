@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { getSubTopic, getTopics } from "../../apis/myApis";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { routes, testMenu } from "../../utils/constantes/constantes";
 import { setTestSubTopic, setTestTopic } from "../../features/application/appSlice";
 import "./testModal.css";
@@ -18,18 +18,17 @@ const TestModal: React.FC<TTestModal> = ({ title }) => {
   const [choosenTopic, setChoosenTopic] = useState<string>("");
   const [choosenSubTopic, setChoosenSubTopic] = useState<string>("");
   const [dataSubtopic, setDataSubtopic] = useState<any>(null);
-  const token = useAppSelector(state => state.auth.token) as string;
-  const { data, isSuccess } = useQuery(["getTopics", token], () => getTopics(token));
+  const { data, isSuccess } = useQuery(["getTopics"], () => getTopics());
 
   useEffect(() => {
     if (title === testMenu.subtopic) {
       queryClient
-        .fetchQuery(["getSubtopic", choosenTopic, token], () => getSubTopic(choosenTopic, token))
+        .fetchQuery(["getSubtopic", choosenTopic], () => getSubTopic(choosenTopic))
         .then(res => {
           res?.data && setDataSubtopic(res.data);
         });
     }
-  }, [choosenTopic, queryClient, title, token]);
+  }, [choosenTopic, queryClient, title]);
 
   return (
     <form className="test-modal">

@@ -1,7 +1,6 @@
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getAllCards, getAllCardsOfTopic, getCard } from "../../apis/myApis";
-import { useAppSelector } from "../../app/hooks";
 import { testMenu } from "../../utils/constantes/constantes";
 import Testing from "../testing/Testing";
 import TestModal from "../testModal/TestModal";
@@ -14,15 +13,13 @@ type TTestOption = {
 
 const TestOption: React.FC<TTestOption> = ({ topic = "", subTopic = "" }) => {
   const id = useParams().id?.slice(1);
-  const token = useAppSelector(state => state.auth.token) as string;
-  const { data, isSuccess } = useQuery(["everything", token], () => getAllCards(token));
-  const { data: datatopic, isSuccess: isSuccessTopic } = useQuery(
-    ["getbyTopic", token, topic],
-    () => getAllCardsOfTopic(token, topic)
+  const { data, isSuccess } = useQuery(["everything"], () => getAllCards());
+  const { data: datatopic, isSuccess: isSuccessTopic } = useQuery(["getbyTopic", topic], () =>
+    getAllCardsOfTopic(topic)
   );
   const { data: dataSubtopic, isSuccess: isSuccessSubtopic } = useQuery(
-    ["getCard", topic, subTopic, token],
-    () => getCard(topic, subTopic, token)
+    ["getCard", topic, subTopic],
+    () => getCard(topic, subTopic)
   );
 
   return (

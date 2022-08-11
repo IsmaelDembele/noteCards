@@ -11,6 +11,7 @@ export const routes = {
   cards: "/cards",
   card: "/card",
   signin: "/signin",
+  signout: "/signout",
   signup: "/signup",
   test: "/test",
   testOptions: "/testOPtions",

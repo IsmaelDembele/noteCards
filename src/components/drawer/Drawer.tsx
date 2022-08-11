@@ -10,10 +10,9 @@ import { useMediaQuery } from "@mui/material";
 const Drawer = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const token = useAppSelector(state => state.auth.token) as string;
   const mobileMatche = useMediaQuery("(max-width:600px)");
   const visibleMobileDrawer = useAppSelector(state => state.app.mobileDrawerVisible);
-  const { data, isSuccess } = useQuery(["islogged", token], () => getLogged(token), {
+  const { data, isSuccess } = useQuery(["islogged"], () => getLogged(), {
     staleTime: 5000,
   });
 

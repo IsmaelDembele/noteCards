@@ -23,7 +23,6 @@ export type TCard = {
 const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
   const mobileMatche = useMediaQuery("(max-width:600px)");
   const appState = useAppSelector(state => state.app);
-  const token = useAppSelector(state => state.auth.token) as string;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
@@ -31,8 +30,8 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
   const [clearAllText, setClearAllText] = useState<string>("");
 
   const { data, isLoading } = useQuery(
-    ["getCards", appState.topic, appState.subTopic, token],
-    () => getCards(appState.topic, appState.subTopic, token),
+    ["getCards", appState.topic, appState.subTopic],
+    () => getCards(appState.topic, appState.subTopic),
     {
       onError: (error: Error) => {
         error && notify(error.message);
@@ -41,10 +40,10 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
   );
 
   const deleteCardsMutation = useMutation(
-    ({ token, topic, subTopic }: IReadCard) => deleteCards(token as string, topic, subTopic),
+    ({ topic, subTopic }: IReadCard) => deleteCards( topic, subTopic),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["getCards", appState.topic, appState.subTopic, token]);
+        queryClient.invalidateQueries(["getCards", appState.topic, appState.subTopic]);
       },
       onError: (error: Error) => {
         error && notify(error.message);
@@ -53,9 +52,9 @@ const Cards: React.FC<ICards> = ({ topic, subTopic }) => {
   );
 
   useEffect(() => {
-    clearAllText === "DELETE" && deleteCardsMutation.mutate({ token, topic, subTopic });
+    clearAllText === "DELETE" && deleteCardsMutation.mutate({ topic, subTopic });
     setClearAllText("");
-  }, [clearAllText,deleteCardsMutation,subTopic,topic,token]);
+  }, [clearAllText,deleteCardsMutation,subTopic,topic]);
 
   return (
     <section className="cards">

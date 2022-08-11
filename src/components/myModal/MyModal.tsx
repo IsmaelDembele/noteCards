@@ -21,7 +21,7 @@ const MyModal: React.FC<TMyModal> = ({
 }) => {
   const [selectItem, setSelectItem] = useState<string>("");
   const [newName, setNewName] = useState<string>("");
-  const token = useAppSelector(state => state.auth.token) as string;
+  // const token = useAppSelector(state => state.auth.token) as string;
   const topic = useAppSelector(state => state.app.topic) as string;
 
   return (
@@ -61,10 +61,10 @@ const MyModal: React.FC<TMyModal> = ({
             }
             onClick={() => {
               if (item === "Topic") {
-                renameItem.mutate({ token: token, topic: selectItem, newTopic: newName });
+                renameItem.mutate({ topic: selectItem, newTopic: newName });
               }
               if (item === "SubTopic") {
-                renameItem.mutate({ token, topic, subTopic: selectItem, newSubTopic: newName });
+                renameItem.mutate({ topic, subTopic: selectItem, newSubTopic: newName });
               }
               setNewName("");
             }}
@@ -80,10 +80,10 @@ const MyModal: React.FC<TMyModal> = ({
             disabled={selectItem === ""}
             onClick={() => {
               if (item === "Topic") {
-                deleteItem.mutate({ topic: selectItem, token: token });
+                deleteItem.mutate({ topic: selectItem });
               }
               if (item === "SubTopic") {
-                deleteItem.mutate({ token, topic, subTopic: selectItem });
+                deleteItem.mutate({ topic, subTopic: selectItem });
               }
               setSelectItem("");
             }}

@@ -33,18 +33,17 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
   setEdit,
 }) => {
   const [card, setCard] = useState<TCard>(initialvalue);
-  const token = useAppSelector(state => state.auth.token) as string;
   const appState = useAppSelector(state => state.app);
   const dispatch = useAppDispatch();
   const smLaptopMatche = useMediaQuery("(max-width:1000px)");
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
-    ({ topic, subTopic, front, back, note, token }: IReadCard) =>
-      addCards({ topic, subTopic, front, back, note, token }),
+    ({ topic, subTopic, front, back, note }: IReadCard) =>
+      addCards({ topic, subTopic, front, back, note }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["getCards", appState.topic, appState.subTopic, token]);
+        queryClient.invalidateQueries(["getCards", appState.topic, appState.subTopic]);
         setNewCard && setNewCard(false);
       },
       onError: error => {
@@ -54,19 +53,18 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
   );
 
   const updateCardMutation = useMutation(
-    ({ topic, subTopic, front, back, note, token, cardID }: IReadCard) =>
+    ({ topic, subTopic, front, back, note, cardID }: IReadCard) =>
       updateCard(
         topic,
         subTopic,
         front as string,
         back as string,
         note as string,
-        token as string,
         cardID as string
       ),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["getCard", appState.topic, appState.subTopic, token]);
+        queryClient.invalidateQueries(["getCard", appState.topic, appState.subTopic]);
 
         setCard(initialvalue);
         setEdit && setEdit(false);
@@ -102,7 +100,6 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
         front: card.front,
         back: card.back,
         note: card.note,
-        token: token,
       });
       dispatch(setNewCard(false));
     } else {
@@ -112,7 +109,6 @@ const CreateEditCard: React.FC<ICreateEditCard> = ({
         front: card.front,
         back: card.back,
         note: card.note,
-        token: token,
         cardID: cardID,
       });
     }
