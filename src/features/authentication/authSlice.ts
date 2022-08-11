@@ -40,7 +40,7 @@ export const authSlice = createSlice({
       localStorage.removeItem(localStorageTopicKey);
       localStorage.removeItem(localStorageSubTopicKey);
 
-      state.token = "";
+      state.token = '';
       state.isLogged = false;
     },
   },

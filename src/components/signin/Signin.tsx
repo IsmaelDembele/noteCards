@@ -22,6 +22,7 @@ const Signin = () => {
   let navigate = useNavigate();
   const dispatch = useAppDispatch();
   const route = useAppSelector(state => state.app.route);
+  const isLogged = useAppSelector(state => state.auth.isLogged);
 
   //check to see if the user is already login in
   const { isLoading } = useQuery(
@@ -32,7 +33,7 @@ const Signin = () => {
         if (!get(localStorageAuthTokenKey)) {
           //if we have a token that has not been store in local/storage yet, we store it
           const authToken = {
-            token: "cookie based token",
+            token: isLogged ? "cookie based token" : "",
           };
           set(localStorageAuthTokenKey, authToken, oneDay); //----
         }
