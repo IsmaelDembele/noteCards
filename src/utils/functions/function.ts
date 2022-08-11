@@ -26,8 +26,6 @@ interface IData {
  * @param {number} ttl- Time to live in seconds.
  */
 export const set = (keyName: string, keyValue: any, ttl: number) => {
-  const appName = process.env.REACT_APP_APP_NAME;
-
   const data: IData = {
     app: process.env.REACT_APP_APP_NAME as string,
     value: keyValue, // store the value within this object

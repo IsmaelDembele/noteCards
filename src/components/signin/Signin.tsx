@@ -21,7 +21,6 @@ const initialValues = { email: "", password: "" };
 const Signin = () => {
   let navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const state = useAppSelector(state => state.auth);
   const route = useAppSelector(state => state.app.route);
 
   //check to see if the user is already login in
