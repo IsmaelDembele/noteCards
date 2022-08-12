@@ -48,6 +48,7 @@ const Signup = () => {
       })}
       onSubmit={(values, { resetForm }) => {
         console.log(values);
+        
         mutation.mutate(values);
         resetForm();
       }}

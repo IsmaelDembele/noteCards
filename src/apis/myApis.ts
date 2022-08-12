@@ -93,17 +93,11 @@ export const getLogged = async () => {
 };
 
 export const postLogged = async (logginInfo: IAuthState) => {
-  return await axios.post(
-    `${_path}${pathRoutes.SIGN_IN}`,
-    { logginInfo }
-    // { withCredentials: false }
-  );
+  return await axios.post(`${_path}${pathRoutes.SIGN_IN}`, logginInfo);
 };
 
 export const postCreateAccount = async (signupInfo: ISignup) => {
-  return await await axios.post(`${_path}${pathRoutes.CREATE_ACCOUNT}`, {
-    signupInfo,
-  });
+  return await await axios.post(`${_path}${pathRoutes.CREATE_ACCOUNT}`, signupInfo);
 };
 
 export const updateCard = async (
